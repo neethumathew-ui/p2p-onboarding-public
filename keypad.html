@@ -10,7 +10,7 @@
   <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
   
   <!-- Preload avatar images - critical for contacts sheet -->
-  <link rel="preload" href="./images/2_Monique_32.png" as="image">
+  <link rel="preload" href="./images/2.Monique-32.png" as="image">
   <link rel="preload" href="./images/⮑ Working 1/Users/2.Darren-64.png" as="image">
   <link rel="preload" href="./images/⮑ Working 1/Users/2.Nina-64.png" as="image">
   
@@ -1762,13 +1762,13 @@
   <div class="app-container">
     <!-- Status Bar -->
     <div class="status-bar">
-      <img src="./images/Status_bar_iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
     </div>
 
     <!-- Title Bar -->
     <div class="title-bar">
       <div class="title-bar-left">
-        <img src="./images/Icons/scan-qr.svg" alt="Scan QR" style="width: 24px; height: 24px;">
+        <img src="./images/scan-qr.svg" alt="Scan QR" style="width: 24px; height: 24px;">
       </div>
       <div class="title-bar-right" onclick="window.location.href='money.html'" style="cursor: pointer;">Skip</div>
     </div>
@@ -1804,7 +1804,7 @@
           <div class="key" onclick="addDecimal()">.</div>
           <div class="key key-2" onclick="addDigit('0')">0</div>
           <div class="key" onclick="deleteDigit()">
-            <img src="./images/Icons/Chevron_Left.svg" alt="Delete" style="width: 24px; height: 24px;">
+            <img src="./images/Chevron-Left.svg" alt="Delete" style="width: 24px; height: 24px;">
           </div>
         </div>
       </div>
@@ -1831,15 +1831,15 @@
     <div class="contacts-sheet" id="contactsSheet">
       <!-- Status Bar (visible in full-screen mode) -->
       <div class="sheet-status-bar">
-        <img src="./images/Status_bar_iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+        <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
       </div>
 
       <div class="sheet-header">
         <div class="sheet-handle"></div>
         <div class="sheet-nav-bar">
           <div class="sheet-close-btn" onclick="handleSheetBack()">
-            <img src="./images/Icons/navigation/close.svg" alt="Close" class="close-icon">
-            <img src="./images/Icons/navigation/back.svg" alt="Back" class="back-icon">
+            <img src="./images/navigation-close.svg" alt="Close" class="close-icon">
+            <img src="./images/navigation-back.svg" alt="Back" class="back-icon">
           </div>
         </div>
       </div>
@@ -1869,9 +1869,9 @@
       <!-- Upsell Card -->
       <div class="upsell-card">
         <div class="contacts-icon">
-          <video autoplay muted playsinline poster="./images/sync_contacts.png">
-            <source src="./images/Contacts_video.mp4" type="video/mp4">
-            <img src="./images/sync_contacts.png" alt="Sync Contacts">
+          <video autoplay muted playsinline poster="./images/sync contacts.png">
+            <source src="./images/Contacts video.mp4" type="video/mp4">
+            <img src="./images/sync contacts.png" alt="Sync Contacts">
           </video>
         </div>
         <div class="card-content">
@@ -1884,7 +1884,7 @@
       <!-- Search Results -->
       <div class="search-results" id="searchResults">
         <div class="contact-cell" onclick="selectContact('Carissa Thompson', '$cariss', '2.Monique-32.png')">
-          <img src="./images/2_Monique_32.png" alt="Carissa Thompson" class="contact-avatar" loading="eager" decoding="async">
+          <img src="./images/2.Monique-32.png" alt="Carissa Thompson" class="contact-avatar" loading="eager" decoding="async">
           <div class="contact-info">
             <div class="contact-name">Carissa Thompson</div>
             <div class="contact-cashtag">$cariss</div>
@@ -1915,7 +1915,7 @@
       </div>
       
       <div class="recipient-info">
-        <img src="./images/2_Monique_32.png" alt="Recipient" class="recipient-avatar" id="selectedRecipientAvatar" loading="eager" decoding="async">
+        <img src="./images/2.Monique-32.png" alt="Recipient" class="recipient-avatar" id="selectedRecipientAvatar" loading="eager" decoding="async">
         <span class="recipient-name" id="selectedRecipientName">Carissa T.</span>
         <span class="recipient-for">for</span>
       </div>
@@ -1932,7 +1932,7 @@
       </div>
       
       <div class="recipient-info">
-        <img src="./images/2_Monique_32.png" alt="Recipient" class="recipient-avatar" id="applePayRecipientAvatar" loading="eager" decoding="async">
+        <img src="./images/2.Monique-32.png" alt="Recipient" class="recipient-avatar" id="applePayRecipientAvatar" loading="eager" decoding="async">
         <span class="recipient-name" id="applePayRecipientName">Carissa T.</span>
         <span class="recipient-for">for</span>
       </div>
@@ -2075,12 +2075,12 @@
   <div class="change-payment-backdrop" id="changePaymentBackdrop" onclick="closeChangePaymentSheet()"></div>
   <div class="change-payment-sheet" id="changePaymentSheet">
     <div class="sheet-status-bar">
-      <img src="./images/Status_bar_iPhone.png" alt="" style="width: 100%; height: 47px; object-fit: cover;" aria-hidden="true">
+      <img src="./images/Status bar - iPhone.png" alt="" style="width: 100%; height: 47px; object-fit: cover;" aria-hidden="true">
     </div>
     <!-- Title bar (match sign-in: close left, Get help right) -->
     <div class="change-payment-title-bar">
       <div class="change-payment-title-bar-left" onclick="closeChangePaymentSheet()" role="button" aria-label="Close">
-        <img src="./images/Icons/navigation/close.svg" alt="Close" style="width: 24px; height: 24px;">
+        <img src="./images/navigation-close.svg" alt="Close" style="width: 24px; height: 24px;">
       </div>
       <div class="change-payment-title-bar-right">
         <button type="button">Get help</button>
