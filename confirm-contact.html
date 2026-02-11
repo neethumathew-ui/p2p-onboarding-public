@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Contact Info - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <style>
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-bg-gray: #f0f0f0;
+      --cash-subtle-gray: #666666;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Push in from right - matches keypad sheet timing */
+    .app-container .screen-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      animation: slideInFromRight 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    }
+
+    @keyframes slideInFromRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+      background-color: var(--cash-white);
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cash-white);
+      margin-top: 47px;
+      position: relative;
+      overflow: hidden;
+      height: calc(844px - 47px);
+    }
+
+    /* Scrollable Content */
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 16px;
+      padding-bottom: 100px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scrollable-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollable-content {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .spacer-medium {
+      height: 16px;
+    }
+
+    .spacer-large {
+      height: 32px;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-top: 16px;
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .page-subtitle {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+      text-align: left;
+      margin-bottom: 32px;
+    }
+
+    .page-subtitle a {
+      color: var(--cash-black);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Contact Info Sections */
+    .contact-info-section {
+      margin-bottom: 24px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 0;
+      border-bottom: none;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--cash-black);
+    }
+
+    .info-icon img {
+      width: 24px;
+      height: 24px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .info-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      color: var(--cash-black);
+    }
+
+    .info-value {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: #666666;
+    }
+
+    .edit-button {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--cash-black);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .edit-button:active {
+      opacity: 0.7;
+    }
+
+    .edit-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Sticky CTA Button */
+    .cta-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--cash-white);
+      padding: 16px;
+      padding-bottom: 8px;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .cta-button {
+      width: 100%;
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+      border: none;
+      border-radius: 9999px;
+      padding: 14px 24px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cta-button:active {
+      opacity: 0.8;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 37px auto 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar (fixed, no animation) -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <div class="screen-content">
+    <!-- Main Container -->
+    <div class="main-container">
+      <!-- Scrollable Content -->
+      <div class="scrollable-content">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="page-title">Confirm your contact info</h1>
+          <p class="page-subtitle">
+            We'll use this information from Apple Pay to set up your account. <a href="https://cash.app/legal/us/en-us/privacy#security" target="_blank" rel="noopener noreferrer">How we keep your data secure</a>.
+          </p>
+        </div>
+
+        <!-- Contact Info Sections -->
+        <div class="contact-info-section">
+          <!-- Legal Name -->
+          <div class="info-row">
+            <div class="info-icon">
+              <img src="./images/avatar.png" alt="" aria-hidden="true">
+            </div>
+            <div class="info-content">
+              <div class="info-label">Legal name</div>
+              <div class="info-value">Kevin Smith</div>
+            </div>
+            <button class="edit-button" onclick="editField('name')">
+              Edit
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Address -->
+          <div class="info-row">
+            <div class="info-icon">
+              <img src="./images/location-fill.png" alt="" aria-hidden="true">
+            </div>
+            <div class="info-content">
+              <div class="info-label">Address</div>
+              <div class="info-value">955 Broadway, Suite 600<br>Oakland, CA 94612</div>
+            </div>
+            <button class="edit-button" onclick="editField('address')">
+              Edit
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Email -->
+          <div class="info-row">
+            <div class="info-icon">
+              <img src="./images/comm-email.png" alt="" aria-hidden="true">
+            </div>
+            <div class="info-content">
+              <div class="info-label">Email</div>
+              <div class="info-value">kevinsmith@gmail.app</div>
+            </div>
+            <button class="edit-button" onclick="editField('email')">
+              Edit
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky CTA Button -->
+      <div class="cta-container">
+        <button class="cta-button" id="confirmBtn" onclick="handleConfirm()">Confirm</button>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    function editField(field) {
+      // Handle edit functionality
+      console.log('Edit field:', field);
+      // In a real app, this would open an edit modal or navigate to edit screen
+    }
+
+    function handleConfirm() {
+      // Save contact info and navigate to assistant screen
+      sessionStorage.setItem('contactInfoConfirmed', 'true');
+      window.location.href = 'after-skip.html';
+    }
+  </script>
+</body>
+</html>
