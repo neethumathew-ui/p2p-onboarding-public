@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Money - Cash App</title>
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-green: #00D632;
+      --cash-dark-bg: #171819;
+      --cash-bg-gray: #f0f0f0;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      position: relative;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-bg-gray);
+      position: relative;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      isolation: isolate;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: var(--cash-bg-gray);
+    }
+    
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    .status-bar-time {
+      font-size: 17px;
+      color: var(--cash-black);
+    }
+
+    .status-bar-right {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      position: relative;
+    }
+
+    .status-bar-right svg,
+    .status-bar-right img {
+      display: block;
+    }
+
+    .mobile-signal {
+      width: 18px;
+      height: 12px;
+    }
+
+    .wifi-icon {
+      width: 17px;
+      height: 11.834px;
+    }
+
+    .battery-icon {
+      width: 27.401px;
+      height: 13px;
+      position: relative;
+    }
+
+    /* Header */
+    .header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-bg-gray);
+      position: relative;
+    }
+
+    .header-title {
+      font-family: var(--font-family);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: -0.18px;
+      color: var(--cash-black);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .profile-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .profile-btn img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    /* Scroll wrapper - contains everything scrollable */
+    .scroll-wrapper {
+      position: absolute;
+      top: 47px; /* Just below status bar */
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 5;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Top Section with Card - scrolls with content */
+    .top-section {
+      position: relative;
+      padding: 8px 16px 0;
+      background-color: var(--cash-bg-gray);
+    }
+
+    /* Card Banner */
+    .card-banner {
+      width: 100%;
+      position: relative;
+    }
+
+    .card-banner img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    /* Sheet / Main Content - overlays card and header */
+    .sheet {
+      position: relative;
+      background-color: var(--cash-bg-gray);
+      border-radius: 40px 40px 0 0;
+      min-height: 800px; /* Fill remaining space */
+      padding-bottom: 100px;
+      margin-top: -160px; /* Overlap card so only ~60px visible */
+      z-index: 10;
+    }
+
+    /* Balance Section - sits on gray background, no white card */
+    .balance-section {
+      background-color: transparent;
+      padding: 24px 24px 24px;
+      position: relative;
+    }
+
+    .balance-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+
+    .balance-label {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.035px;
+      color: var(--cash-black);
+    }
+
+    .balance-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--cash-black);
+    }
+
+    .balance-amount {
+      font-family: var(--font-family);
+      font-size: 56px;
+      font-weight: 500;
+      line-height: 56px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+      margin-bottom: 96px;
+    }
+
+    .balance-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .balance-btn {
+      flex: 1;
+      height: 52px;
+      border-radius: 9999px;
+      border: none;
+      background-color: var(--cash-white);
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--cash-black);
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .balance-btn:active {
+      background-color: var(--cash-light-gray);
+    }
+
+    /* Section Header */
+    .section-header {
+      padding: 24px 24px 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-family);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: -0.18px;
+      color: var(--cash-black);
+    }
+
+    /* Setup Card */
+    .setup-card {
+      margin: 0 16px 16px;
+      background-color: var(--cash-white);
+      border-radius: 24px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Getting Started Row */
+    .getting-started-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 16px 16px 8px; /* 16px right margin for buttons */
+      cursor: pointer;
+    }
+
+    .getting-started-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .getting-started-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .getting-started-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .getting-started-label {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+    }
+
+    .resume-btn {
+      height: 32px;
+      padding: 8px 16px;
+      border-radius: 1000px;
+      background-color: var(--cash-light-gray);
+      border: none;
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0.035px;
+      color: var(--cash-black);
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .resume-btn:active {
+      background-color: #d1d1d1;
+    }
+
+    /* Explore Card */
+    .explore-card {
+      margin: 0 16px 16px;
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      background-color: var(--cash-white);
+    }
+
+    .explore-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Service List */
+    .service-list {
+      padding: 0;
+    }
+
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      background-color: var(--cash-bg-gray);
+      cursor: pointer;
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .service-icon img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .service-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .service-title {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+    }
+
+    .service-subtitle {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: -0.035px;
+      color: #666;
+    }
+
+    .service-btn {
+      height: 32px;
+      padding: 8px 16px;
+      border-radius: 1000px;
+      background-color: var(--cash-light-gray);
+      border: none;
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0.035px;
+      color: var(--cash-black);
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .service-btn:active {
+      background-color: #d1d1d1;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: var(--cash-white);
+    }
+
+    .bottom-nav img {
+      width: 100%;
+      height: auto;
+    }
+
+    .bottom-nav .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 0 auto 8px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .animate-slide {
+      animation: slideUp 0.4s ease-out;
+    }
+
+    .animate-slide-delay-1 {
+      animation: slideUp 0.4s ease-out 0.1s both;
+    }
+
+    .animate-slide-delay-2 {
+      animation: slideUp 0.4s ease-out 0.2s both;
+    }
+
+    .animate-slide-delay-3 {
+      animation: slideUp 0.4s ease-out 0.3s both;
+    }
+
+    /* Half Sheet Overlay */
+    .sheet-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1500;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      border-radius: 48px;
+    }
+
+    .sheet-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Half Sheet */
+    .half-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--cash-white);
+      border-radius: 32px 32px 0 0;
+      z-index: 1600;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      padding: 32px 16px 0;
+    }
+
+    .half-sheet.active {
+      transform: translateY(0);
+    }
+
+    .half-sheet-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .half-sheet-title {
+      font-family: var(--font-family);
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 32px;
+      color: var(--cash-black);
+      margin-bottom: 4px;
+    }
+
+    .half-sheet-subtitle {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--cash-gray);
+    }
+
+    /* Amount Grid */
+    .amount-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 0 auto 16px;
+      width: 327px;
+      height: 144px;
+    }
+
+    .amount-btn {
+      height: 68px;
+      border-radius: 16px;
+      border: 1px solid var(--cash-light-gray);
+      background-color: var(--cash-white);
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: 1.5%;
+      color: var(--cash-black);
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .amount-btn:active {
+      background-color: var(--cash-light-gray);
+    }
+
+    .amount-btn.selected {
+      border: 2px solid var(--cash-black);
+    }
+
+    .amount-btn.more {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pending-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Payment Buttons */
+    .payment-btn {
+      width: 100%;
+      height: 56px;
+      border-radius: 9999px;
+      border: 1px solid var(--cash-light-gray);
+      background-color: var(--cash-white);
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--cash-black);
+      cursor: pointer;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .payment-btn:active {
+      background-color: var(--cash-light-gray);
+    }
+
+    .payment-btn.primary {
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+      border: none;
+    }
+
+    .payment-btn.primary:active {
+      opacity: 0.8;
+    }
+
+    .apple-pay-logo {
+      height: 32px;
+      width: auto;
+      vertical-align: middle;
+    }
+
+    .half-sheet-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 24px auto 8px;
+    }
+  </style>
+</head>
+<body>
+  <a href="signin.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Scroll Wrapper -->
+    <div class="scroll-wrapper">
+      <!-- Header -->
+      <div class="header animate-fade">
+        <div class="header-title">Money</div>
+        <div class="header-right">
+          <div class="search-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10.5" cy="10.5" r="6.5" stroke="black" stroke-width="2"/>
+              <line x1="15.5" y1="15.5" x2="21" y2="21" stroke="black" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="profile-btn">
+            <img src="./images/profile.png" alt="Profile">
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Section with Card -->
+      <div class="top-section animate-slide">
+        <div class="card-banner">
+          <img src="./images/card asset.png" alt="Get your free card">
+        </div>
+      </div>
+
+      <!-- Sheet / Main Content -->
+      <div class="sheet">
+      <!-- Balance Section -->
+      <div class="balance-section animate-slide-delay-1">
+        <div class="balance-header">
+          <span class="balance-label">Cash balance</span>
+          <svg class="balance-chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="balance-amount">$0.00</div>
+        <div class="balance-buttons">
+          <button class="balance-btn" onclick="openAddMoneySheet()">Add money</button>
+          <button class="balance-btn">Withdraw</button>
+        </div>
+      </div>
+
+      <!-- Getting Started Section -->
+      <div class="section-header animate-slide-delay-2">
+        <div class="section-title">Getting started</div>
+      </div>
+
+      <div class="setup-card animate-slide-delay-2">
+        <!-- Row 1: Set up your account -->
+        <div class="getting-started-row" onclick="window.location.href='keypad.html'">
+          <div class="getting-started-icon">
+            <img src="./images/George.png" alt="Set up account">
+          </div>
+          <div class="getting-started-content">
+            <span class="getting-started-label">Set up your account</span>
+          </div>
+          <button class="resume-btn">Resume</button>
+        </div>
+
+        <!-- Row 2: Start sending and receiving money -->
+        <div class="getting-started-row">
+          <div class="getting-started-icon">
+            <img src="./images/Money.png" alt="Send money">
+          </div>
+          <div class="getting-started-content">
+            <span class="getting-started-label">Start sending and receiving money</span>
+          </div>
+          <button class="resume-btn">Resume</button>
+        </div>
+      </div>
+
+      <!-- More for you Section -->
+      <div class="section-header animate-slide-delay-3">
+        <div class="section-title">More for you</div>
+      </div>
+
+      <!-- Explore Card -->
+      <div class="explore-card animate-slide-delay-3">
+        <img src="./images/nux featured tiles.png" alt="Explore Cash App your way">
+      </div>
+
+      <!-- Service List -->
+      <div class="service-list animate-slide-delay-3">
+        <div class="service-item">
+          <div class="service-icon">
+            <img src="./images/afterpay.png" alt="Afterpay">
+          </div>
+          <div class="service-content">
+            <span class="service-title">Afterpay</span>
+            <span class="service-subtitle">Pay over time</span>
+          </div>
+          <button class="service-btn">Start</button>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <img src="./images/savings.png" alt="Savings">
+          </div>
+          <div class="service-content">
+            <span class="service-title">Savings</span>
+            <span class="service-subtitle">Up to 3.5% interest</span>
+          </div>
+          <button class="service-btn">Start</button>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <img src="./images/borrow.png" alt="Borrow">
+          </div>
+          <div class="service-content">
+            <span class="service-title">Borrow</span>
+            <span class="service-subtitle">Instant extra cash</span>
+          </div>
+          <button class="service-btn">Start</button>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <img src="./images/ppaychecks.png" alt="Paychecks">
+          </div>
+          <div class="service-content">
+            <span class="service-title">Paychecks</span>
+            <span class="service-subtitle">Get paid faster</span>
+          </div>
+          <button class="service-btn">Start</button>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <img src="./images/bitcoin.png" alt="Bitcoin">
+          </div>
+          <div class="service-content">
+            <span class="service-title">Bitcoin</span>
+            <span class="service-subtitle">Buy and sell easily</span>
+          </div>
+          <button class="service-btn">Start</button>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <img src="./images/stocks.png" alt="Stocks">
+          </div>
+          <div class="service-content">
+            <span class="service-title">Stocks</span>
+            <span class="service-subtitle">Zero commission fees</span>
+          </div>
+          <button class="service-btn">Start</button>
+        </div>
+      </div>
+    </div>
+    </div> <!-- Close scroll-wrapper -->
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <img src="./images/bottom-navigation-usa.png" alt="Navigation">
+      <div class="home-indicator"></div>
+    </div>
+
+    <!-- Half Sheet Overlay -->
+    <div class="sheet-overlay" id="sheetOverlay" onclick="closeAddMoneySheet()"></div>
+
+    <!-- Add Money Half Sheet -->
+    <div class="half-sheet" id="addMoneySheet">
+      <div class="half-sheet-header">
+        <div class="half-sheet-title">Add money</div>
+        <div class="half-sheet-subtitle">Cash balance $0.00</div>
+      </div>
+
+      <div class="amount-grid">
+        <button class="amount-btn" onclick="selectAmount(this)">$10</button>
+        <button class="amount-btn" onclick="selectAmount(this)">$25</button>
+        <button class="amount-btn" onclick="selectAmount(this)">$50</button>
+        <button class="amount-btn" onclick="selectAmount(this)">$100</button>
+        <button class="amount-btn" onclick="selectAmount(this)">$200</button>
+        <button class="amount-btn more"><img src="./images/pending.png" alt="More" class="pending-icon"></button>
+      </div>
+
+      <button class="payment-btn">Add money with <img src="./images/Apple_Pay-Logo.wine 1.png" alt="Apple Pay" class="apple-pay-logo"></button>
+      <button class="payment-btn primary" onclick="window.location.href='keypad.html'">Add money from debit card</button>
+
+      <div class="half-sheet-indicator"></div>
+    </div>
+  </div>
+
+  <script>
+    const scrollWrapper = document.querySelector('.scroll-wrapper');
+    const sheet = document.querySelector('.sheet');
+    const sheetOverlay = document.getElementById('sheetOverlay');
+    const addMoneySheet = document.getElementById('addMoneySheet');
+    
+    // Update sheet border radius based on scroll position
+    scrollWrapper.addEventListener('scroll', function() {
+      const scrollTop = scrollWrapper.scrollTop;
+      const headerAndCardHeight = 200; // Height of header + card before sheet covers them
+      
+      // Calculate border radius - goes from 40px to 0 as you scroll
+      const progress = Math.min(scrollTop / headerAndCardHeight, 1);
+      const borderRadius = 40 * (1 - progress);
+      sheet.style.borderRadius = borderRadius + 'px ' + borderRadius + 'px 0 0';
+    });
+
+    // Select amount in half sheet
+    function selectAmount(btn) {
+      // Remove selected class from all amount buttons
+      document.querySelectorAll('.amount-btn').forEach(function(b) {
+        b.classList.remove('selected');
+      });
+      // Add selected class to clicked button
+      btn.classList.add('selected');
+    }
+
+    // Open Add Money half sheet
+    function openAddMoneySheet() {
+      sheetOverlay.classList.add('active');
+      addMoneySheet.classList.add('active');
+    }
+
+    // Close Add Money half sheet
+    function closeAddMoneySheet() {
+      sheetOverlay.classList.remove('active');
+      addMoneySheet.classList.remove('active');
+      // Clear selection when closing
+      document.querySelectorAll('.amount-btn').forEach(function(b) {
+        b.classList.remove('selected');
+      });
+    }
+  </script>
+</body>
+</html>
