@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Verification Code - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- Prefetch next page (details) and avatar assets -->
+  <link rel="prefetch" href="loader.html">
+  <link rel="prefetch" href="details.html">
+  <link rel="prefetch" href="keypad.html">
+  <link rel="prefetch" href="./images/2.Monique-32.png">
+  <link rel="prefetch" href="./images/⮑ Working 1/Users/2.Darren-64.png">
+  <link rel="prefetch" href="./images/⮑ Working 1/Users/2.Nina-64.png">
+  
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-green: #00D632;
+      --cash-prominent-border: #101010;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Remove blue highlight on inputs */
+    input, textarea, button, select {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      background-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    /* Title Bar */
+    .title-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-white);
+    }
+
+    .title-bar-left {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .title-bar-left img {
+      width: 20.035px;
+      height: 20.035px;
+      filter: brightness(0);
+    }
+
+    .title-bar-right button {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.035px;
+      line-height: 16px;
+      background-color: var(--cash-light-gray);
+      color: var(--cash-black);
+      border: none;
+      border-radius: 9999px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .title-bar-right button:active {
+      opacity: 0.7;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spacer-medium {
+      height: 16px;
+    }
+
+    .spacer-large {
+      height: 32px;
+    }
+
+    .spacer-small {
+      height: 8px;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-top: 16px;
+    }
+
+    .page-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+    }
+
+    /* Verification Code Input */
+    .verification-container {
+      margin-top: 32px;
+      width: 100%;
+    }
+
+    .code-inputs {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .digit-input {
+      width: 48.83px;
+      height: 64px;
+      background-color: var(--cash-white);
+      border: 1px solid var(--cash-gray);
+      border-radius: 12px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+      text-align: center;
+      transition: border-color 0.2s, border-width 0.2s;
+      caret-color: transparent;
+      flex-shrink: 0;
+    }
+
+    .digit-input:focus {
+      outline: none;
+      border-color: var(--cash-prominent-border);
+      border-width: 2px;
+    }
+
+    .digit-input.filled {
+      border-color: var(--cash-prominent-border);
+      border-width: 2px;
+    }
+
+    .code-separator {
+      font-family: 'Cash Sans', sans-serif;
+      font-size: 40px;
+      font-weight: 200;
+      line-height: 1;
+      color: var(--cash-gray);
+      width: 17px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .help-text {
+      margin-top: 8px;
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: -0.035px;
+      color: var(--cash-black);
+    }
+
+    /* CTA Button Group */
+    .cta-group {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background-color: var(--cash-white);
+      padding: 16px;
+      padding-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      height: 56px;
+      border-radius: 9999px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active:not(:disabled) {
+      opacity: 0.7;
+    }
+
+    .btn-standard {
+      background-color: var(--cash-light-gray);
+      color: var(--cash-black);
+    }
+
+    .btn-prominent {
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+    }
+
+    .btn:disabled {
+      background-color: var(--cash-light-gray);
+      color: var(--cash-gray);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 37px auto 0;
+    }
+
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <div class="title-bar-left" onclick="window.location.href='signin.html'">
+        <img src="./images/Icons/navigation/close.svg" alt="Close" style="width: 24px; height: 24px;">
+      </div>
+      <div class="title-bar-right">
+        <button>Get help</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="spacer-medium"></div>
+      
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title" id="pageTitle">Enter the code sent to<br>(555) 555-5555</h1>
+      </div>
+
+      <!-- Verification Code Container -->
+      <div class="verification-container">
+        <div class="code-inputs">
+          <input type="tel" class="digit-input" id="digit1" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="tel" class="digit-input" id="digit2" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="tel" class="digit-input" id="digit3" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <div class="code-separator">-</div>
+          <input type="tel" class="digit-input" id="digit4" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="tel" class="digit-input" id="digit5" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="tel" class="digit-input" id="digit6" maxlength="1" inputmode="numeric" pattern="[0-9]">
+        </div>
+        <div class="help-text" id="helpText">You can resend the code in <span id="countdown">17</span>s</div>
+      </div>
+    </div>
+
+    <!-- CTA Button Group -->
+    <div class="cta-group">
+      <div class="button-row">
+        <button class="btn btn-standard" id="resendBtn" disabled>Resend Code</button>
+        <button type="button" class="btn btn-prominent" id="continueBtn" onclick="window.location.replace('loader.html?flow=onboarding'); return false;">Continue</button>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+
+  <script>
+    // Get phone number from session storage
+    const phoneNumber = sessionStorage.getItem('phoneNumber') || '555-555-5555';
+    const formattedPhone = phoneNumber.replace(/(\d{3})-(\d{3})-(\d{4})/, '($1) $2-$3');
+    document.getElementById('pageTitle').innerHTML = `Enter the code sent to<br>${formattedPhone}`;
+
+    // Get all digit inputs
+    const digitInputs = [
+      document.getElementById('digit1'),
+      document.getElementById('digit2'),
+      document.getElementById('digit3'),
+      document.getElementById('digit4'),
+      document.getElementById('digit5'),
+      document.getElementById('digit6')
+    ];
+
+    const continueBtn = document.getElementById('continueBtn');
+    const resendBtn = document.getElementById('resendBtn');
+    const countdownEl = document.getElementById('countdown');
+
+    // Countdown timer for resend
+    let countdown = 17;
+    const countdownTimer = setInterval(() => {
+      countdown--;
+      countdownEl.textContent = countdown;
+      
+      if (countdown <= 0) {
+        clearInterval(countdownTimer);
+        document.getElementById('helpText').textContent = 'Didn\'t receive a code?';
+        resendBtn.disabled = false;
+      }
+    }, 1000);
+
+    // Handle digit input
+    digitInputs.forEach((input, index) => {
+      input.addEventListener('input', function(e) {
+        const value = e.target.value;
+        
+        // Only allow digits
+        if (value && !/^\d$/.test(value)) {
+          e.target.value = '';
+          return;
+        }
+
+        // Add filled class
+        if (value) {
+          e.target.classList.add('filled');
+          
+          // Auto-focus next input
+          if (index < digitInputs.length - 1) {
+            digitInputs[index + 1].focus();
+          } else {
+            // All digits filled, enable continue button
+            checkAllDigitsFilled();
+          }
+        } else {
+          e.target.classList.remove('filled');
+        }
+        
+        checkAllDigitsFilled();
+      });
+
+      // Handle backspace
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          digitInputs[index - 1].focus();
+          digitInputs[index - 1].value = '';
+          digitInputs[index - 1].classList.remove('filled');
+          checkAllDigitsFilled();
+        }
+      });
+
+      // Handle paste
+      input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData('text').replace(/\D/g, '');
+        
+        if (pastedData.length === 6) {
+          digitInputs.forEach((inp, i) => {
+            inp.value = pastedData[i] || '';
+            if (pastedData[i]) {
+              inp.classList.add('filled');
+            }
+          });
+          checkAllDigitsFilled();
+          digitInputs[5].focus();
+        }
+      });
+    });
+
+    // Check if all digits are filled (Continue stays enabled for prototype so you can click through to details)
+    function checkAllDigitsFilled() {
+      const allFilled = digitInputs.every(input => input.value !== '');
+      // continueBtn.disabled = !allFilled; // re-enable for production
+    }
+
+    // Handle continue button – go to details (add account details), then keypad
+    continueBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.replace('loader.html?flow=onboarding');
+      return false;
+    });
+
+    // Handle resend button
+    resendBtn.addEventListener('click', function() {
+      // Clear all inputs
+      digitInputs.forEach(input => {
+        input.value = '';
+        input.classList.remove('filled');
+      });
+      
+      // Reset countdown
+      countdown = 17;
+      countdownEl.textContent = countdown;
+      document.getElementById('helpText').innerHTML = 'You can resend the code in <span id="countdown">17</span>s';
+      resendBtn.disabled = true;
+      continueBtn.disabled = true;
+      digitInputs[0].focus();
+      
+      // Restart timer
+      const newCountdown = setInterval(() => {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+        
+        if (countdown <= 0) {
+          clearInterval(newCountdown);
+          document.getElementById('helpText').textContent = 'Didn\'t receive a code?';
+          resendBtn.disabled = false;
+        }
+      }, 1000);
+      
+      // Show feedback
+      alert('A new code has been sent to ' + formattedPhone);
+    });
+
+    // Focus first input on load
+    digitInputs[0].focus();
+  </script>
+</body>
+</html>
