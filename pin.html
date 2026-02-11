@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create PIN - Cash App</title>
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-bg-gray: #f0f0f0;
+      --cash-subtle-gray: #666666;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      padding: 0 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.408px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .status-bar-time {
+      font-size: 17px;
+    }
+
+    .status-bar-right {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .mobile-signal {
+      width: 18px;
+      height: 12px;
+    }
+
+    .wifi-icon {
+      width: 17px;
+      height: 11.834px;
+    }
+
+    .battery-icon {
+      width: 27.401px;
+      height: 13px;
+    }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cash-white);
+      margin-top: 47px;
+      position: relative;
+      animation: slideInFromRight 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      overflow: hidden;
+    }
+
+    .main-container.exit {
+      animation: slideOutDown 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    }
+
+    @keyframes slideInFromRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutDown {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(100%);
+      }
+    }
+
+    /* Title Bar */
+    .title-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-white);
+      flex-shrink: 0;
+    }
+
+    .title-bar-left {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .title-bar-left svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 31px 16px 0;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeInContent 0.3s ease 0.1s forwards;
+    }
+
+    .page-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin-bottom: 16px;
+    }
+
+    .page-subtitle {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+    }
+
+    /* PIN Dots */
+    .pin-dots {
+      display: flex;
+      justify-content: flex-start;
+      gap: 16px;
+      margin-top: 0;
+      opacity: 0;
+      animation: fadeInContent 0.3s ease 0.15s forwards;
+    }
+
+    @keyframes fadeInContent {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pin-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--cash-light-gray);
+      background-color: transparent;
+      transition: all 0.15s ease;
+    }
+
+    .pin-dot.filled {
+      background-color: var(--cash-black);
+      border-color: var(--cash-black);
+    }
+
+    /* Keyboard */
+    .keyboard {
+      margin-top: auto;
+      width: 100%;
+      transform: translateY(100%);
+      animation: slideUpKeyboard 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) 0.2s forwards;
+    }
+
+    .keyboard img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes slideUpKeyboard {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    /* Home Indicator */
+    .home-indicator-container {
+      padding: 8px 0 8px;
+      background-color: #D1D5DB;
+      display: flex;
+      justify-content: center;
+    }
+
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+    }
+  </style>
+</head>
+<body>
+  <a href="signin.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+      <!-- Title Bar -->
+      <div class="title-bar">
+        <div class="title-bar-left" onclick="goBack()">
+          <img src="./images/Icons/navigation/close.svg" alt="Close" style="width: 24px; height: 24px;">
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="page-title">Create a Cash App PIN</h1>
+          <p class="page-subtitle">Add additional security to your account. Update anytime in Settings.</p>
+        </div>
+
+        <!-- PIN Dots -->
+        <div class="pin-dots">
+          <div class="pin-dot" id="dot1"></div>
+          <div class="pin-dot" id="dot2"></div>
+          <div class="pin-dot" id="dot3"></div>
+          <div class="pin-dot" id="dot4"></div>
+        </div>
+      </div>
+
+      <!-- Keyboard -->
+      <div class="keyboard" onclick="handleKeyboardClick(event)">
+        <img src="./images/keyboard-numbers.png" alt="Keyboard">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let pin = '';
+    const maxDigits = 4;
+
+    function handleKeyboardClick(event) {
+      const img = event.target;
+      if (img.tagName !== 'IMG') return;
+      
+      const rect = img.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      
+      // Calculate relative position (0-1)
+      const relX = x / rect.width;
+      const relY = y / rect.height;
+      
+      // Determine which key was pressed based on position
+      // Number row is roughly at top 20% of keyboard
+      if (relY < 0.22) {
+        // Number row: 1-9, 0
+        const col = Math.floor(relX * 10);
+        const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+        if (col >= 0 && col < 10) {
+          enterDigit(digits[col]);
+        }
+      }
+    }
+
+    function enterDigit(digit) {
+      if (pin.length < maxDigits) {
+        pin += digit;
+        updateDots();
+        
+        // Check if PIN is complete
+        if (pin.length === maxDigits) {
+          setTimeout(() => {
+            // Navigate to success or next screen
+            window.location.href = 'money.html';
+          }, 300);
+        }
+      }
+    }
+
+    function deleteDigit() {
+      if (pin.length > 0) {
+        pin = pin.slice(0, -1);
+        updateDots();
+      }
+    }
+
+    function updateDots() {
+      for (let i = 1; i <= maxDigits; i++) {
+        const dot = document.getElementById('dot' + i);
+        if (i <= pin.length) {
+          dot.classList.add('filled');
+        } else {
+          dot.classList.remove('filled');
+        }
+      }
+    }
+
+    function goBack() {
+      const mainContainer = document.getElementById('mainContainer');
+      mainContainer.classList.add('exit');
+      
+      setTimeout(() => {
+        window.location.href = 'money.html';
+      }, 300);
+    }
+  </script>
+</body>
+</html>
