@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in / Sign up - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- Prefetch next pages and assets -->
+  <link rel="prefetch" href="verification.html">
+  <link rel="prefetch" href="keypad.html">
+  <link rel="prefetch" href="./images/2.Monique-32.png">
+  <link rel="prefetch" href="./images/⮑ Working 1/Users/2.Darren-64.png">
+  <link rel="prefetch" href="./images/⮑ Working 1/Users/2.Nina-64.png">
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans Mono';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-green: #00D632;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Remove blue highlight on inputs */
+    input, textarea, button, select {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      background-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Inner content */
+    .app-container .screen-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    /* Title Bar */
+    .title-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-white);
+    }
+
+    .title-bar-left {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .title-bar-left img {
+      width: 20.035px;
+      height: 20.035px;
+      filter: brightness(0);
+    }
+
+    .title-bar-right button {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.035px;
+      line-height: 16px;
+      background-color: var(--cash-light-gray);
+      color: var(--cash-black);
+      border: none;
+      border-radius: 9999px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .title-bar-right button:active {
+      opacity: 0.7;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spacer-medium {
+      height: 16px;
+    }
+
+    .spacer-large {
+      height: 32px;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-top: 16px;
+    }
+
+    .page-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin-bottom: 8px;
+    }
+
+    /* Input Field */
+    .input-container {
+      margin-top: 32px;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 56px;
+      background-color: var(--cash-white);
+      border: 2px solid var(--cash-light-gray);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--cash-black);
+      border-width: 2px;
+    }
+
+    .input-field::placeholder {
+      color: var(--cash-gray);
+    }
+
+    .help-text {
+      margin-top: 8px;
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: -0.035px;
+      color: var(--cash-black);
+    }
+
+    /* CTA Button Group */
+    .cta-group {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background-color: var(--cash-white);
+      padding: 16px;
+      padding-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .disclaimer {
+      font-family: 'Cash Sans Mono', 'Courier New', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0.3px;
+      color: #666666;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .disclaimer a {
+      color: #666666;
+      text-decoration: underline;
+    }
+
+    .btn {
+      flex: 1;
+      height: 56px;
+      border-radius: 9999px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active {
+      opacity: 0.7;
+    }
+
+    .btn-standard {
+      background-color: var(--cash-light-gray);
+      color: var(--cash-black);
+    }
+
+    .btn-prominent {
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+    }
+
+    .btn-prominent:disabled {
+      background-color: var(--cash-light-gray);
+      color: var(--cash-gray);
+      cursor: not-allowed;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 37px auto 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <div class="screen-content">
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <div class="title-bar-left">
+        <img src="./images/Icons/navigation/close.svg" alt="Close" style="width: 24px; height: 24px;">
+      </div>
+      <div class="title-bar-right">
+        <button>Get help</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="spacer-medium"></div>
+      
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">Enter your mobile phone number</h1>
+      </div>
+
+      <!-- Input Container -->
+      <div class="input-container">
+        <input 
+          type="tel" 
+          id="phoneInput" 
+          class="input-field" 
+          placeholder="555-555-5555"
+          maxlength="12"
+        >
+        <div class="help-text">We'll text you a code to verify your number.</div>
+      </div>
+    </div>
+
+    <!-- CTA Button Group -->
+    <div class="cta-group">
+      <div class="disclaimer">
+        By entering and tapping next, you agree to the <a href="#">Terms</a>, <a href="#">E-sign Consent</a> & <a href="#">Privacy Notice</a>.<br><br>
+        You agree to a one time password confirmation code from Cash App. Message frequency varies. Message and data rates may apply. Reply HELP for help, STOP to cancel.
+      </div>
+      <div class="button-row">
+        <button class="btn btn-standard">Use email</button>
+        <button class="btn btn-prominent" id="continueBtn" disabled>Continue</button>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    const phoneInput = document.getElementById('phoneInput');
+    const continueBtn = document.getElementById('continueBtn');
+
+    // Format phone number as user types
+    phoneInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      
+      if (value.length > 10) {
+        value = value.slice(0, 10);
+      }
+      
+      let formatted = '';
+      if (value.length > 0) {
+        formatted = value.substring(0, 3);
+      }
+      if (value.length >= 4) {
+        formatted += '-' + value.substring(3, 6);
+      }
+      if (value.length >= 7) {
+        formatted += '-' + value.substring(6, 10);
+      }
+      
+      e.target.value = formatted;
+      
+      // Enable/disable continue button based on phone number length
+      continueBtn.disabled = value.length !== 10;
+    });
+
+    // Handle continue button click
+    continueBtn.addEventListener('click', function() {
+      const phoneNumber = phoneInput.value;
+      // Store phone number for verification screen
+      sessionStorage.setItem('phoneNumber', phoneNumber);
+      // Navigate to verification screen
+      window.location.href = 'verification.html';
+    });
+
+    // Allow enter key to continue
+    phoneInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !continueBtn.disabled) {
+        continueBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>
