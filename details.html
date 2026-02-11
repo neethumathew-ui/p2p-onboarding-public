@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Details - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- Prefetch next pages -->
+  <link rel="prefetch" href="review.html">
+  <link rel="prefetch" href="success.html">
+  
+  <!-- Only redirect when flow=p2p (payment flow). Show details form for flow=onboarding (after verification), flow=setup, or direct open. -->
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var flow = params.get('flow');
+      if (flow === 'p2p') {
+        window.location.replace('review.html');
+      }
+    })();
+  </script>
+  
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-bg-gray: #f0f0f0;
+      --cash-subtle-gray: #666666;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Remove blue highlight on inputs */
+    input, textarea, button, select {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      background-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      padding: 0 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.408px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .status-bar-time {
+      font-size: 17px;
+    }
+
+    .status-bar-right {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .mobile-signal {
+      width: 18px;
+      height: 12px;
+    }
+
+    .wifi-icon {
+      width: 17px;
+      height: 11.834px;
+    }
+
+    .battery-icon {
+      width: 27.401px;
+      height: 13px;
+    }
+
+    /* Main Container - slides up from bottom */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cash-white);
+      margin-top: 47px;
+      position: relative;
+      animation: slideUpFromBottom 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+      overflow: hidden;
+      height: calc(844px - 47px);
+    }
+
+    .main-container.from-right {
+      animation: slideInFromLeft 0.25s linear;
+    }
+
+    .main-container.from-left {
+      animation: slideInFromLeftSide 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .main-container.exit {
+      animation: slideOutDown 0.3s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+    }
+
+    .main-container.exit-left {
+      animation: slideOutToLeft 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    }
+
+    .main-container.exit-right {
+      animation: slideOutToRight 0.25s linear forwards;
+    }
+
+    @keyframes slideUpFromBottom {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideOutDown {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(100%);
+      }
+    }
+
+    @keyframes slideInFromLeft {
+      from {
+        opacity: 0.7;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInFromLeftSide {
+      from {
+        transform: translateX(-100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutToLeft {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes slideOutToRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0.7;
+        transform: translateX(20px);
+      }
+    }
+
+    /* Title Bar */
+    .title-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-white);
+      flex-shrink: 0;
+    }
+
+    .title-bar-left {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .title-bar-left svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Scrollable Content */
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 16px;
+      padding-bottom: 180px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hide scrollbar for iOS feel */
+    .scrollable-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollable-content {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .spacer-medium {
+      height: 16px;
+    }
+
+    .spacer-large {
+      height: 32px;
+    }
+
+    .spacer-small {
+      height: 8px;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin-bottom: 16px;
+    }
+
+    .page-subtitle {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+    }
+
+    /* Security Link */
+    .security-link {
+      text-align: left;
+      padding: 8px 0;
+      margin-bottom: 32px;
+    }
+
+    .security-link a {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0.14px;
+      color: var(--cash-black);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Input Field */
+    .input-group {
+      margin-bottom: 8px;
+    }
+
+    .input-label {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      color: var(--cash-black);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .input-field {
+      width: 100%;
+      background-color: var(--cash-white);
+      border: 1px solid var(--cash-gray);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+      outline: none;
+    }
+
+    .input-field::placeholder {
+      color: var(--cash-subtle-gray);
+    }
+
+    .input-field:focus {
+      border-color: var(--cash-black);
+    }
+
+    .input-help {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: -0.035px;
+      color: var(--cash-black);
+      margin-top: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .input-row .input-group {
+      flex: 1;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+    }
+
+    /* Sticky CTA Button */
+    .cta-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--cash-white);
+      padding: 16px;
+      padding-bottom: 8px;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .cta-button {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 9999px;
+      padding: 14px 24px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cta-button.active {
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+    }
+
+    .cta-button.active:active {
+      opacity: 0.8;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 37px auto 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+      <!-- Title Bar (spacing only; back arrow removed) -->
+      <div class="title-bar">
+      </div>
+
+      <!-- Scrollable Content -->
+      <div class="scrollable-content">
+        <div class="spacer-medium"></div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="page-title">Tell us a bit about yourself</h1>
+        </div>
+
+        <!-- Legal Name -->
+        <div class="input-group">
+          <label class="input-label">Legal name</label>
+          <input type="text" class="input-field" placeholder="First name" id="firstName" value="Jane">
+        </div>
+
+        <div class="input-group">
+          <input type="text" class="input-field" placeholder="Last name" id="lastName" value="Smith">
+          <p class="input-help">Use the name on your government ID.</p>
+        </div>
+
+        <div class="spacer-large"></div>
+
+        <!-- Date of Birth -->
+        <div class="input-group">
+          <label class="input-label">Date of birth</label>
+          <input type="text" class="input-field" placeholder="MM/DD/YYYY" id="dob" value="02/24/1992">
+          <p class="input-help">If you're under 18, you'll need a parent or guardian to sponsor your account.</p>
+        </div>
+
+        <!-- Security Link (32px from bottom of date of birth input) -->
+        <div class="security-link" style="margin-top: 32px;">
+          <a href="#">How we keep your data secure</a>
+        </div>
+
+      </div>
+
+      <!-- Sticky CTA Button -->
+      <div class="cta-container">
+        <button class="cta-button active" id="continueBtn">Continue</button>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const continueBtn = document.getElementById('continueBtn');
+    const inputs = document.querySelectorAll('.input-field');
+    const mainContainer = document.getElementById('mainContainer');
+
+    // Check if coming back from another screen
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('from') === 'review') {
+      mainContainer.classList.add('from-right');
+    } else if (urlParams.get('from') === 'pin') {
+      mainContainer.classList.add('from-left');
+    }
+
+    // Restore saved form data on load
+    const savedData = {
+      firstName: sessionStorage.getItem('detailsFirstName') || '',
+      lastName: sessionStorage.getItem('detailsLastName') || '',
+      dob: sessionStorage.getItem('detailsDob') || ''
+    };
+
+    // Populate fields with saved data
+    document.getElementById('firstName').value = savedData.firstName;
+    document.getElementById('lastName').value = savedData.lastName;
+    document.getElementById('dob').value = savedData.dob;
+
+    // Check form validity on load
+    checkFormValidity();
+
+    // Check if all fields are filled (for styling only, button is always clickable)
+    function checkFormValidity() {
+      let allFilled = true;
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          allFilled = false;
+        }
+      });
+      
+      if (allFilled) {
+        continueBtn.classList.add('active');
+      } else {
+        continueBtn.classList.remove('active');
+      }
+    }
+
+    // Add input listeners and save to sessionStorage
+    inputs.forEach(input => {
+      input.addEventListener('input', function() {
+        checkFormValidity();
+        
+        // Save to sessionStorage
+        const fieldId = input.id;
+        sessionStorage.setItem('details' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1), input.value);
+      });
+    });
+
+    // Get the flow type from URL (onboarding = after verification, setup = from money, p2p = in payment flow)
+    const flow = urlParams.get('flow') || 'setup';
+
+    // Continue button click
+    continueBtn.addEventListener('click', function() {
+      // Add exit animation - slide out to left (iOS style)
+      mainContainer.classList.add('exit-left');
+      
+      // Clear saved form data after successful submission
+      sessionStorage.removeItem('detailsFirstName');
+      sessionStorage.removeItem('detailsLastName');
+      sessionStorage.removeItem('detailsDob');
+
+      setTimeout(() => {
+        if (flow === 'setup') {
+          window.location.href = 'pin.html';
+        } else if (flow === 'onboarding') {
+          // After verification: go to keypad
+          window.location.href = 'keypad.html';
+        } else {
+          window.location.href = 'review.html';
+        }
+      }, 300);
+    });
+
+    // Back button
+    function goBack() {
+      const mainContainer = document.getElementById('mainContainer');
+      mainContainer.classList.add('exit');
+      
+      const amount = sessionStorage.getItem('paymentAmount') || '';
+      setTimeout(() => {
+        if (flow === 'setup') {
+          window.location.href = 'money.html';
+        } else if (flow === 'onboarding') {
+          window.location.href = 'verification.html';
+        } else {
+          window.location.href = amount ? `keypad.html?amount=${amount}` : 'keypad.html';
+        }
+      }, 300);
+    }
+  </script>
+</body>
+</html>
