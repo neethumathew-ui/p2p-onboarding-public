@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./images/⮑ Working 1/Primary.png" as="image">
+  <link rel="preload" href="./Video/Onboarding_1080.mp4" as="video" type="video/mp4">
+  
+  <!-- Prefetch next pages -->
+  <link rel="prefetch" href="signin.html">
+  <link rel="prefetch" href="keypad.html">
+  
+  <!-- Preload avatar images for contacts -->
+  <link rel="prefetch" href="./images/2.Monique-32.png">
+  <link rel="prefetch" href="./images/⮑ Working 1/Users/2.Darren-64.png">
+  <link rel="prefetch" href="./images/⮑ Working 1/Users/2.Nina-64.png">
+  
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-green: #00D632;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-black);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Video Background */
+    .video-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+      background-color: #000;
+    }
+
+    .video-background video {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 844px;
+      width: auto;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-background video.loaded {
+      opacity: 1;
+    }
+
+    /* Content Overlay */
+    .content-overlay {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 22px 0 0 0;
+    }
+
+    /* Spacer to push content down */
+    .content-spacer {
+      flex: 1;
+    }
+
+    /* Sign in controls section - Black Gradient */
+    .sign-in-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 64px 16px 8px 16px;
+      border-radius: 0;
+      position: relative;
+      width: 100%;
+      
+      /* Black Gradient - transparent to solid black */
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 50%
+      );
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-white);
+      border-radius: 100px;
+      margin: 37px auto 0;
+    }
+
+    /* Logo Section */
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cash-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cash-logo-text {
+      height: 30px;
+    }
+
+    .cash-logo-text img {
+      height: 100%;
+      width: auto;
+    }
+
+    /* Headline */
+    .headline {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 32px;
+      letter-spacing: -0.8px;
+      color: var(--cash-white);
+      max-width: 272px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Get Started button - white style */
+    .btn-cta {
+      width: 100%;
+      height: 56px;
+      background: var(--cash-white);
+      color: var(--cash-black);
+      border: none;
+      border-radius: 9999px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .btn-cta:hover {
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .btn-cta:active {
+      transform: scale(0.98);
+    }
+
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Video Background -->
+    <div class="video-background">
+      <video id="bgVideo" autoplay loop muted playsinline preload="auto">
+        <source src="./Video/Onboarding_1080.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Status Bar -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 47px; z-index: 100; display: flex; align-items: center; justify-content: center;">
+      <img src="./images/White - Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Content Overlay -->
+    <div class="content-overlay">
+      <!-- Spacer to push content to bottom -->
+      <div class="content-spacer"></div>
+
+      <!-- Sign in controls -->
+      <div class="sign-in-controls">
+        <!-- Logo Section -->
+        <div class="logo-section">
+          <!-- Cash App Logo -->
+          <div class="cash-logo">
+            <!-- Cash App text -->
+            <div class="cash-logo-text">
+              <img src="./images/⮑ Working 1/Primary.png" alt="Cash App">
+            </div>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="headline">The way money should work</h1>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="cta-section">
+          <button class="btn-cta" onclick="window.location.href='signin.html'">Get started</button>
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Show video as soon as it can play
+    const video = document.getElementById('bgVideo');
+    video.addEventListener('canplay', function() {
+      video.classList.add('loaded');
+    });
+    // Fallback: show after short delay even if canplay doesn't fire
+    setTimeout(() => video.classList.add('loaded'), 200);
+  </script>
+</body>
+</html>
