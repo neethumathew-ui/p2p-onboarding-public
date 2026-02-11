@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review and Confirm - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- Prefetch next page -->
+  <link rel="prefetch" href="success.html">
+  
+  <!-- Payment flow should use half-sheet review on keypad; redirect to it if we have payment data -->
+  <script>
+    (function() {
+      var note = sessionStorage.getItem('paymentNote');
+      var contact = sessionStorage.getItem('selectedContact');
+      if (note || contact) {
+        window.location.replace('keypad.html?showPaymentReview=1');
+      }
+    })();
+  </script>
+  
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans Mono';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-bg-gray: #f0f0f0;
+      --cash-subtle-gray: #666666;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Remove blue highlight on inputs */
+    input, textarea, button, select {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      background-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    /* Title Bar */
+    .title-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-white);
+      animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s backwards;
+    }
+
+    .title-bar-left {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: -8px;
+    }
+
+    .title-bar-left img {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cash-white);
+      position: relative;
+      overflow-y: auto;
+      animation: slideInFromRight 0.25s linear;
+    }
+
+    .main-container.exit {
+      animation: slideOutToRight 0.25s linear forwards;
+    }
+
+    @keyframes slideInFromRight {
+      from {
+        opacity: 0.7;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutToRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0.7;
+        transform: translateX(20px);
+      }
+    }
+
+    @keyframes slideInUpFade {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Content */
+    .content {
+      padding: 16px 16px 0 16px;
+      animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.15s backwards;
+    }
+
+    .payment-headline {
+      margin-bottom: 8px;
+    }
+
+    .payment-headline-text {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+    }
+
+    .payment-headline-text .gray {
+      color: var(--cash-gray);
+    }
+
+    .recipient-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .recipient-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .recipient-text {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+    }
+
+    .note-text {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin-bottom: 16px;
+    }
+
+    .style-button {
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: inline-block;
+      border: none;
+      background: none;
+      padding: 0;
+    }
+
+    .style-button img {
+      display: block;
+      height: auto;
+    }
+
+    .style-button:active {
+      opacity: 0.7;
+    }
+
+    /* Payment Lockup - Bottom Section */
+    .payment-lockup {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--cash-white);
+      padding: 0 16px 8px 16px;
+    }
+
+    .payment-instrument {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+
+    .visa-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .instrument-text {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--cash-black);
+      flex: 1;
+    }
+
+    .expand-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .disclaimer {
+      font-family: 'Cash Sans Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--cash-subtle-gray);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .continue-btn {
+      width: 100%;
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+      border: none;
+      border-radius: 9999px;
+      padding: 14px 24px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-bottom: 0;
+    }
+
+    .continue-btn:active {
+      opacity: 0.7;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 37px auto 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+      <!-- Title Bar -->
+      <div class="title-bar">
+        <div class="title-bar-left" onclick="goBack()">
+          <img src="./images/Icons/navigation/back.svg" alt="Back">
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <div class="payment-headline">
+          <div class="payment-headline-text">
+            Pay <span id="displayAmount">$65</span> <span class="gray">to</span>
+          </div>
+        </div>
+
+        <div class="recipient-line">
+          <img src="./images/2.Monique-32.png" alt="Recipient" class="recipient-avatar" id="recipientAvatar" loading="eager" decoding="async">
+          <span class="recipient-text"><span id="recipientName">Carissa T.</span> <span class="gray">for</span></span>
+        </div>
+
+        <div class="note-text" id="noteText">Summer day trip</div>
+
+        <button class="style-button"><img src="./images/↳ 🟢 App + Web P2P Onboarding 1/style_button.png" alt="Style it"></button>
+      </div>
+
+      <!-- Payment Lockup -->
+      <div class="payment-lockup">
+        <div class="payment-instrument">
+          <svg class="visa-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="20" height="20" fill="#1A1F71"/>
+            <path d="M8.5 6.5L7.5 13.5H6L7 6.5H8.5Z" fill="white"/>
+            <path d="M13 6.5L11.5 11L10.5 6.5H9L10.5 13.5H12L14.5 6.5H13Z" fill="white"/>
+          </svg>
+          <span class="instrument-text">Visa debit 7829</span>
+          <svg class="expand-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6L8 10L12 6" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="disclaimer">
+          Payments can't be canceled once they're sent.
+        </div>
+
+        <button class="continue-btn" id="continueBtn" onclick="sendPayment()">Send payment</button>
+
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get payment data from sessionStorage
+    const amount = sessionStorage.getItem('paymentAmount') || '65';
+    const note = sessionStorage.getItem('paymentNote') || 'Summer day trip';
+    const contactData = sessionStorage.getItem('selectedContact');
+    
+    // Set display values
+    document.getElementById('displayAmount').textContent = '$' + amount;
+    document.getElementById('noteText').textContent = note;
+    
+    // Set recipient info if available
+    if (contactData) {
+      const contact = JSON.parse(contactData);
+      const displayName = contact.name.split(' ')[0] + ' ' + contact.name.split(' ')[1].charAt(0) + '.';
+      document.getElementById('recipientName').textContent = displayName;
+      document.getElementById('recipientAvatar').src = './images/' + contact.avatar;
+    }
+
+    // Back button
+    function goBack() {
+      const mainContainer = document.getElementById('mainContainer');
+      mainContainer.classList.add('exit');
+      
+      // Navigate quickly - animation runs in parallel
+      setTimeout(function() {
+        window.location.href = 'keypad.html';
+      }, 250);
+    }
+
+    // Send payment - navigate to success screen
+    function sendPayment() {
+      window.location.href = 'success.html';
+    }
+  </script>
+</body>
+</html>
