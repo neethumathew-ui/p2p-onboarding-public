@@ -1,0 +1,2518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keypad - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- Preload avatar images - critical for contacts sheet -->
+  <link rel="preload" href="./images/2.Monique-32.png" as="image">
+  <link rel="preload" href="./images/⮑ Working 1/Users/2.Darren-64.png" as="image">
+  <link rel="preload" href="./images/⮑ Working 1/Users/2.Nina-64.png" as="image">
+  
+  <!-- Prefetch next pages -->
+  <link rel="prefetch" href="review.html">
+  <link rel="prefetch" href="success.html">
+  
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* Cash Sans Mono Font */
+    @font-face {
+      font-family: 'Cash Sans Mono';
+      src: url('./fonts/CashSansMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-green: #00e013;
+      --cash-dark-bg: #171819;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Remove blue highlight on inputs */
+    input, textarea, button, select {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      background-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      position: relative;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-green);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      isolation: isolate;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    .mobile-signal {
+      width: 18px;
+      height: 12px;
+    }
+
+    .wifi-icon {
+      width: 17px;
+      height: 11.834px;
+    }
+
+    .battery-icon {
+      width: 27.401px;
+      height: 13px;
+      position: relative;
+    }
+
+    /* Title Bar */
+    .title-bar {
+      height: 76px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeIn 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .title-bar-left {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title-bar-left svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .title-bar-right {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.035px;
+      line-height: 16px;
+      color: var(--cash-black);
+      cursor: pointer;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: slideUpFadeIn 0.3s ease-out;
+    }
+
+    @keyframes slideUpFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Amount Display */
+    .amount-display {
+      height: 175px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+      animation: fadeIn 0.3s ease-out 0.1s both;
+    }
+
+    .amount {
+      font-family: var(--font-family);
+      font-size: 96px;
+      font-weight: 500;
+      line-height: 96px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+      text-align: center;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      top: calc(50% - 182.5px);
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      animation: fadeIn 0.3s ease-out 0.15s both;
+    }
+
+    .tooltip.hidden {
+      display: none;
+    }
+
+
+    .tooltip-pointer {
+      width: 18px;
+      height: 10px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tooltip-pointer::before {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px;
+      height: 12px;
+      background-color: var(--cash-dark-bg);
+    }
+
+    .tooltip-content {
+      background-color: var(--cash-dark-bg);
+      color: var(--cash-white);
+      padding: 12px 16px 16px;
+      border-radius: 10px;
+      font-family: 'CashMarket', var(--font-family);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+      letter-spacing: 0.14px;
+      white-space: nowrap;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Keypad */
+    .keypad {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20.5px 16px 19.5px;
+      animation: fadeIn 0.3s ease-out 0.2s both;
+    }
+
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0 24px;
+      justify-items: center;
+    }
+
+    .key {
+      width: 103px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-family);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 28px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.2s;
+    }
+
+    .key:active {
+      opacity: 0.6;
+    }
+
+    .key-2 {
+      width: 102px;
+    }
+
+    .key img {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Bottom Buttons */
+    .bottom-buttons {
+      padding: 0 16px;
+      margin-bottom: 8px;
+      animation: fadeIn 0.3s ease-out 0.25s both;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      height: 56px;
+      border-radius: 9999px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+    }
+
+    .btn:active {
+      opacity: 0.7;
+    }
+
+    .btn-half {
+      flex: 1;
+    }
+
+    .btn-half.btn-secondary {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: var(--cash-black);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    /* Home Indicator */
+    .home-indicator-container {
+      height: 34px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+    }
+
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+    }
+
+    /* ===== SHEET OVERLAY STYLES ===== */
+    .sheet-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      border-radius: 48px;
+    }
+
+    .sheet-backdrop.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Contacts Sheet */
+    .contacts-sheet {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 744px;
+      max-height: 90vh;
+      background-color: var(--cash-white);
+      border-radius: 40px 40px 48px 48px;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                  height 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  border-radius 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .contacts-sheet.visible {
+      transform: translateY(0);
+    }
+
+    /* Apple Pay mode - smaller height */
+    .contacts-sheet.apple-pay-mode {
+      height: 550px;
+      max-height: 550px;
+    }
+
+    .sheet-header {
+      padding-top: 12px;
+      padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .sheet-handle {
+      width: 36px;
+      height: 5px;
+      background-color: #C7C7CC;
+      border-radius: 100px;
+      margin-bottom: 8px;
+    }
+
+    .sheet-nav-bar {
+      width: 100%;
+      height: 52px;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .sheet-close-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      padding: 12px;
+    }
+
+    .sheet-close-btn svg,
+    .sheet-close-btn img {
+      position: absolute;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      filter: brightness(0) saturate(100%);
+    }
+
+    .sheet-close-btn .close-icon {
+      opacity: 1;
+      width: 24px;
+      height: 24px;
+    }
+
+    .sheet-close-btn .back-icon {
+      opacity: 0;
+      width: 24px;
+      height: 24px;
+    }
+
+    .contacts-sheet.note-mode .sheet-close-btn .close-icon,
+    .contacts-sheet.apple-pay-mode .sheet-close-btn .close-icon {
+      opacity: 0;
+      transform: rotate(-90deg);
+    }
+
+    .contacts-sheet.note-mode .sheet-close-btn .back-icon,
+    .contacts-sheet.apple-pay-mode .sheet-close-btn .back-icon {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+
+    .sheet-status-bar {
+      display: none;
+      height: 47px;
+      flex-shrink: 0;
+    }
+
+    .sheet-status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    .sheet-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      min-height: 0;
+    }
+
+    .apple-pay-view {
+      padding-bottom: 20px;
+    }
+
+    /* Contact Search View */
+    .contact-search-view {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s;
+      position: relative;
+      width: 100%;
+    }
+
+    .contacts-sheet.note-mode .contact-search-view,
+    .contacts-sheet.apple-pay-mode .contact-search-view {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0.25s;
+    }
+
+    /* Note Input View */
+    .note-input-view {
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 0;
+      transform: translateX(20px);
+      transition: opacity 0.25s ease 0.05s, transform 0.25s ease 0.05s, visibility 0s 0.3s;
+    }
+
+    .contacts-sheet.note-mode .note-input-view {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+      position: relative;
+      transform: translateX(0);
+      transition: opacity 0.25s ease 0.05s, transform 0.25s ease 0.05s, visibility 0s;
+    }
+
+    /* Note → Apple Pay: note fades out first (no overlap) */
+    .contacts-sheet.apple-pay-mode .note-input-view {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      position: absolute;
+      transform: translateX(-20px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+    }
+
+    /* Apple Pay View - sits on top during transition */
+    .apple-pay-view {
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1;
+      transform: translateX(20px);
+      padding-bottom: 16px;
+      flex: 1;
+      min-height: 0;
+      /* Fade in after note fades out to avoid text overlap */
+      transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s, visibility 0s 0.2s;
+    }
+
+    .contacts-sheet.apple-pay-mode .apple-pay-view {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+      position: relative;
+      transform: translateX(0);
+      transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s, visibility 0s;
+    }
+
+    .contacts-sheet.apple-pay-mode .sheet-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      padding-bottom: 0;
+      justify-content: flex-start;
+    }
+
+    .contacts-sheet.apple-pay-mode .apple-pay-view {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: flex-start;
+      padding-bottom: 0;
+    }
+
+    /* Change Payment Method - Full-screen modal (contained in prototype) */
+    .change-payment-backdrop {
+      display: none;
+    }
+    .change-payment-sheet {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: var(--cash-white);
+      z-index: 1003;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      border-radius: 40px 40px 48px 48px;
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+    }
+    .change-payment-sheet.visible {
+      transform: translateY(0);
+    }
+    .change-payment-sheet .sheet-status-bar {
+      display: block;
+      flex-shrink: 0;
+    }
+    /* Header: match sign-in screen (title bar + left-aligned page title) */
+    .change-payment-title-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      background-color: var(--cash-white);
+    }
+    .change-payment-title-bar-left {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .change-payment-title-bar-left img {
+      width: 20.035px;
+      height: 20.035px;
+      filter: brightness(0);
+    }
+    .change-payment-title-bar-left:active {
+      opacity: 0.7;
+    }
+    .change-payment-title-bar-right button {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.035px;
+      line-height: 16px;
+      background-color: var(--cash-light-gray);
+      color: var(--cash-black);
+      border: none;
+      border-radius: 9999px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .change-payment-title-bar-right button:active {
+      opacity: 0.7;
+    }
+    .change-payment-title-bar-right {
+      display: none;
+    }
+    .change-payment-page-header {
+      margin-top: 16px;
+      flex-shrink: 0;
+      padding: 0 20px 0 20px;
+    }
+    .change-payment-page-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin: 0 0 8px 0;
+      text-align: left;
+    }
+    .change-payment-sheet .change-payment-sheet-content {
+      flex: 1;
+      padding: 0 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      min-height: 0;
+    }
+    .change-payment-options {
+      padding-bottom: 24px;
+    }
+    .change-payment-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 20px 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .change-payment-option:active {
+      opacity: 0.7;
+    }
+    .change-payment-option-icon {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .change-payment-option-icon-circle {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background-color: #F0F0F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 24px;
+      font-weight: 400;
+      color: #666666;
+      line-height: 1;
+    }
+    .change-payment-option-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .change-payment-option-title {
+      font-family: var(--font-family);
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--cash-black);
+    }
+
+    #changePaymentOptionLinkCard {
+      justify-content: center;
+      align-items: center;
+    }
+    .change-payment-option-fee {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.35;
+      color: #666666;
+    }
+    .change-payment-option-radio {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--cash-black);
+      border-radius: 50%;
+      background-color: var(--cash-black);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .change-payment-option-radio::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--cash-white);
+    }
+    .change-payment-option:not(.selected) .change-payment-option-radio {
+      background-color: transparent;
+    }
+    .change-payment-option:not(.selected) .change-payment-option-radio::after {
+      display: none;
+    }
+    .change-payment-done-wrap {
+      flex-shrink: 0;
+      padding: 24px 20px 40px;
+      padding-bottom: max(40px, env(safe-area-inset-bottom));
+    }
+    .change-payment-done-btn {
+      width: 100%;
+      height: 56px;
+      border: none;
+      border-radius: 28px;
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+      font-family: var(--font-family);
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .change-payment-done-btn:active {
+      opacity: 0.85;
+    }
+
+    /* Apple Pay Confirmation Bottom Sheet */
+    .apple-pay-confirmation-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      border-radius: 48px;
+    }
+
+    .apple-pay-confirmation-backdrop.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .apple-pay-confirmation-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transform: translateY(100%);
+      width: 100%;
+      background-color: transparent;
+      border-radius: 24px 24px 0 0;
+      z-index: 10001;
+      display: flex;
+      flex-direction: column;
+      max-height: 90%;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .apple-pay-confirmation-sheet.visible {
+      transform: translateY(0);
+    }
+
+    .apple-pay-drawer-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      border-radius: 24px 24px 0 0;
+    }
+
+    .apple-pay-confirm-tap-area {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 88px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .apple-pay-confirm-tap-area:active {
+      opacity: 0.9;
+    }
+
+    @keyframes slideIn {
+      0% {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(4px);
+        opacity: 1;
+      }
+    }
+
+    @keyframes subtleBounce {
+      0%, 100% {
+        transform: translateX(4px);
+      }
+      50% {
+        transform: translateX(2px);
+      }
+    }
+
+    .double-click-to-pay {
+      position: absolute;
+      top: 156px;
+      right: 0;
+      width: 140px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      z-index: 10002;
+      transform: translateX(100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .double-click-to-pay.visible {
+      pointer-events: auto;
+      cursor: pointer;
+      animation: slideIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+                 subtleBounce 1.2s ease-in-out 0.8s 2;
+    }
+
+    .apple-pay-confirmation-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px 16px;
+      flex-shrink: 0;
+    }
+
+    .apple-pay-logo-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .apple-pay-header-logo {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .apple-pay-header-text {
+      font-family: var(--font-family);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 24px;
+      color: var(--cash-black);
+    }
+
+    .apple-pay-close-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--cash-black);
+      transition: opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .apple-pay-close-btn:active {
+      opacity: 0.6;
+    }
+
+    .apple-pay-close-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .apple-pay-confirmation-content-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px 20px;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .apple-pay-confirmation-card {
+      background-color: var(--cash-white);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .apple-pay-confirmation-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .apple-pay-section-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      color: var(--cash-black);
+      margin-top: 2px;
+    }
+
+    .apple-pay-confirmation-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .apple-pay-confirmation-label {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--cash-black);
+    }
+
+    .apple-pay-confirmation-sublabel {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--cash-gray);
+    }
+
+    .apple-pay-contact-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--cash-gray);
+    }
+
+    .apple-pay-confirmation-amount {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 40px;
+      color: var(--cash-black);
+      margin-top: 4px;
+    }
+
+    .apple-pay-chevron {
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .apple-pay-change-method {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .apple-pay-change-method:active {
+      opacity: 0.6;
+    }
+
+    .apple-pay-change-method span {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--cash-black);
+    }
+
+    .apple-pay-confirmation-footer {
+      flex-shrink: 0;
+    }
+
+    .apple-pay-confirm-instruction {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px 20px;
+    }
+
+    .apple-pay-confirm-instruction svg {
+      width: 24px;
+      height: 24px;
+      color: var(--cash-gray);
+    }
+
+    .apple-pay-confirm-instruction span {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--cash-gray);
+    }
+
+    .apple-pay-safe-area {
+      height: 34px;
+      min-height: 34px;
+    }
+
+    .apple-pay-button-container {
+      padding: 0;
+      margin-bottom: 50px;
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .contacts-sheet.apple-pay-mode .note-input-section {
+      display: none;
+    }
+
+    .note-display {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--cash-black);
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .style-it-container {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .style-it-btn {
+      background-color: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: inline-block;
+    }
+
+    .style-it-btn:active {
+      opacity: 0.7;
+    }
+
+    .style-it-btn-image {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    .payment-method-container {
+      margin-top: 0;
+    }
+
+    .payment-method-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 0;
+    }
+
+    .payment-method-logo {
+      height: 30px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .payment-method-text {
+      flex: 1;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--cash-black);
+    }
+
+    .fee-text {
+      color: var(--cash-gray);
+    }
+
+    .chevron-icon {
+      flex-shrink: 0;
+      margin-left: -2px;
+    }
+
+    .payment-disclaimer {
+      font-family: 'Cash Sans Mono', 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--cash-gray);
+      margin: 0;
+      text-align: center;
+      width: 100%;
+    }
+
+    .apple-pay-button-large {
+      width: 100%;
+      height: 56px;
+      background-color: var(--cash-black);
+      border: none;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      padding: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .apple-pay-button-large:active {
+      opacity: 0.8;
+    }
+
+    .apple-pay-button-logo {
+      width: 59px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+      filter: brightness(0) invert(1);
+    }
+
+    .apple-pay-button-text {
+      color: white;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .recipient-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      margin-bottom: 0;
+    }
+
+    .sheet-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin: 16px 0 8px 0;
+    }
+
+    .sheet-title .amount {
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+    }
+
+    .sheet-title .to {
+      color: var(--cash-gray);
+    }
+
+    /* Search Bar */
+    .search-container {
+      background-color: var(--cash-white);
+      padding: 8px 16px;
+      margin: 0 -16px;
+    }
+
+    .search-field {
+      background-color: #F0F0F0;
+      background-color: #f0f0f0;
+      border-radius: 9999px;
+      padding: 6px 8px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .search-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666666;
+    }
+    
+    .search-icon svg {
+      color: #666666;
+    }
+    
+    .search-icon svg circle,
+    .search-icon svg line {
+      stroke: #666666;
+    }
+
+    .search-icon svg {
+      width: 18.207px;
+      height: 18.207px;
+    }
+
+    .search-input {
+      flex: 1;
+      background: none;
+      border: none;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #666666;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: #666666;
+    }
+
+    /* Upsell Card */
+    .upsell-card {
+      background-color: var(--cash-white);
+      border: 1px solid var(--cash-light-gray);
+      border-radius: 40px;
+      padding: 24px;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contacts-icon {
+      width: 97px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+    }
+
+    .contacts-icon video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.3);
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--cash-black);
+      padding-bottom: 8px;
+    }
+
+    .card-body {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #666666;
+    }
+
+    .sync-button {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+      border: none;
+      border-radius: 9999px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      align-self: flex-start;
+    }
+
+    .sync-button:active {
+      opacity: 0.7;
+    }
+
+    /* Contact Results */
+    .search-results {
+      display: none;
+      flex-direction: column;
+      margin-top: 0;
+    }
+
+    .search-results.visible {
+      display: flex;
+      animation: fadeInUp 0.3s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-family: var(--font-family);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+      color: var(--cash-black);
+      padding: 0 16px;
+      margin: 0 -16px 0 -16px;
+    }
+
+    .contact-cell {
+      height: 80px;
+      padding: 0 16px;
+      margin: 0 -16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .contact-cell:active {
+      background-color: #1E1E1E;
+    }
+
+    .contact-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .contact-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-name {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--cash-black);
+    }
+
+    .contact-cashtag {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #666666;
+    }
+
+    .contact-search-view.searching .upsell-card {
+      display: none;
+    }
+
+    .recipient-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .recipient-name {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+    }
+
+    .recipient-for {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-gray);
+    }
+
+    .note-preview {
+      display: none; /* Live type preview removed */
+    }
+
+    /* Note Input Section - bottom of sheet */
+    .note-input-section {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--cash-light-gray);
+      background-color: var(--cash-white);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .contacts-sheet.note-mode .note-input-section {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .note-input-container {
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .note-input {
+      flex: 1;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--cash-black);
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    .note-input::placeholder {
+      color: #666666;
+    }
+
+    .continue-btn {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      background-color: rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .continue-btn.active {
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+    }
+
+    .continue-btn:active {
+      opacity: 0.7;
+    }
+
+    /* iOS Keyboard */
+    .ios-keyboard {
+      width: 100%;
+      background-color: #d1d3d9;
+      backdrop-filter: blur(54px);
+      padding: 0 3px;
+      padding-bottom: 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .keyboard-suggestions {
+      height: 46px;
+      background-color: #d1d3d9;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 1px;
+    }
+
+    .keyboard-suggestion {
+      flex: 1;
+      text-align: center;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 17px;
+      line-height: 22px;
+      color: #000000;
+    }
+
+    .keyboard-divider {
+      width: 1px;
+      height: 25px;
+      background-color: #aeaeb2;
+      opacity: 0.5;
+    }
+
+    .keyboard-keys {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 3px;
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .keyboard-row.middle-row {
+      padding: 0 16px;
+    }
+
+    .key-letter {
+      background: white;
+      border-radius: 4.6px;
+      height: 42px;
+      min-width: 32px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'SF Pro Display', -apple-system, sans-serif;
+      font-size: 22px;
+      line-height: 28px;
+      color: #000000;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .key-letter:active {
+      background: #d1d5db;
+    }
+
+    .key-letter.special {
+      background: #abb0bc;
+      min-width: 42px;
+      max-width: 42px;
+      font-size: 20px;
+    }
+
+    .key-letter.wide {
+      flex: 2.7;
+      min-width: 91px;
+      background: #abb0bc;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 21px;
+    }
+
+    .key-letter.space {
+      flex: 5;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 21px;
+    }
+
+    .keyboard-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      margin-top: 13px;
+      margin-bottom: 8px;
+    }
+
+    .keyboard-icon {
+      width: 27px;
+      height: 27px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <div class="title-bar-left">
+        <img src="./images/Icons/scan-qr.svg" alt="Scan QR" style="width: 24px; height: 24px;">
+      </div>
+      <div class="title-bar-right" onclick="window.location.href='money.html'" style="cursor: pointer;">Skip</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Amount Display -->
+      <div class="amount-display">
+        <div class="amount" id="amount">$0</div>
+      </div>
+
+      <!-- Tooltip -->
+      <div class="tooltip" id="tooltip">
+        <div class="tooltip-pointer"></div>
+        <div class="tooltip-content">Start by entering an amount</div>
+      </div>
+
+      <!-- Keypad -->
+      <div class="keypad">
+        <div class="keypad-grid">
+          <div class="key" onclick="addDigit('1')">1</div>
+          <div class="key key-2" onclick="addDigit('2')">2</div>
+          <div class="key" onclick="addDigit('3')">3</div>
+          
+          <div class="key" onclick="addDigit('4')">4</div>
+          <div class="key key-2" onclick="addDigit('5')">5</div>
+          <div class="key" onclick="addDigit('6')">6</div>
+          
+          <div class="key" onclick="addDigit('7')">7</div>
+          <div class="key key-2" onclick="addDigit('8')">8</div>
+          <div class="key" onclick="addDigit('9')">9</div>
+          
+          <div class="key" onclick="addDecimal()">.</div>
+          <div class="key key-2" onclick="addDigit('0')">0</div>
+          <div class="key" onclick="deleteDigit()">
+            <img src="./images/Icons/Chevron - Left.svg" alt="Delete" style="width: 24px; height: 24px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Buttons -->
+      <div class="bottom-buttons">
+        <div class="button-row">
+          <button class="btn btn-half btn-secondary">Pool</button>
+          <button class="btn btn-half btn-secondary">Request</button>
+        </div>
+        <button class="btn btn-full" id="payBtn">Pay</button>
+      </div>
+
+      <!-- Home Indicator -->
+      <div class="home-indicator-container">
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+
+    <!-- Sheet Backdrop -->
+    <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeAllSheets()"></div>
+
+    <!-- Contacts Sheet -->
+    <div class="contacts-sheet" id="contactsSheet">
+      <!-- Status Bar (visible in full-screen mode) -->
+      <div class="sheet-status-bar">
+        <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+      </div>
+
+      <div class="sheet-header">
+        <div class="sheet-handle"></div>
+        <div class="sheet-nav-bar">
+          <div class="sheet-close-btn" onclick="handleSheetBack()">
+            <img src="./images/Icons/navigation/close.svg" alt="Close" class="close-icon">
+            <img src="./images/Icons/navigation/back.svg" alt="Back" class="back-icon">
+          </div>
+        </div>
+      </div>
+      
+      <div class="sheet-content" id="contactsSheetContent">
+        <!-- Contact Search View -->
+        <div class="contact-search-view" id="contactSearchView">
+          <div class="sheet-title">
+            <span>Pay </span><span class="amount" id="sheetAmount">$65</span><span class="to"> to</span>
+          </div>
+          
+          <!-- Search Bar -->
+          <div class="search-container">
+        <div class="search-field">
+          <div class="search-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7.5" cy="7.5" r="6.5" stroke="#666666" stroke-width="2"/>
+              <line x1="12.5" y1="12.5" x2="17.5" y2="17.5" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <input type="text" class="search-input" id="contactSearchInput" placeholder="Name, $cashtag, email, phone...">
+          </div>
+      </div>
+      
+      <div style="height: 8px;"></div>
+      
+      <!-- Upsell Card -->
+      <div class="upsell-card">
+        <div class="contacts-icon">
+          <video autoplay muted playsinline poster="./images/sync contacts.png">
+            <source src="./images/Contacts video.mp4" type="video/mp4">
+            <img src="./images/sync contacts.png" alt="Sync Contacts">
+          </video>
+        </div>
+        <div class="card-content">
+          <div class="card-title">Find people you know on Cash App</div>
+          <div class="card-body">Allow access to your contacts to find friends and make sure you're paying the right person.</div>
+          <button class="sync-button">Sync contacts</button>
+        </div>
+      </div>
+      
+      <!-- Search Results -->
+      <div class="search-results" id="searchResults">
+        <div class="contact-cell" onclick="selectContact('Carissa Thompson', '$cariss', '2.Monique-32.png')">
+          <img src="./images/2.Monique-32.png" alt="Carissa Thompson" class="contact-avatar" loading="eager" decoding="async">
+          <div class="contact-info">
+            <div class="contact-name">Carissa Thompson</div>
+            <div class="contact-cashtag">$cariss</div>
+          </div>
+        </div>
+        <div class="contact-cell" onclick="selectContact('Carter Collins', '$coconut', '⮑ Working 1/Users/2.Darren-64.png')">
+          <img src="./images/⮑ Working 1/Users/2.Darren-64.png" alt="Carter Collins" class="contact-avatar" loading="eager" decoding="async">
+          <div class="contact-info">
+            <div class="contact-name">Carter Collins</div>
+            <div class="contact-cashtag">$coconut</div>
+          </div>
+        </div>
+        <div class="contact-cell" onclick="selectContact('Claire Cooper', '$carrot', '⮑ Working 1/Users/2.Nina-64.png')">
+          <img src="./images/⮑ Working 1/Users/2.Nina-64.png" alt="Claire Cooper" class="contact-avatar" loading="eager" decoding="async">
+          <div class="contact-info">
+            <div class="contact-name">Claire Cooper</div>
+            <div class="contact-cashtag">$carrot</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Contact Search View -->
+
+    <!-- Note Input View -->
+    <div class="note-input-view" id="noteInputView">
+      <div class="sheet-title">
+        <span>Pay </span><span class="amount" id="noteSheetAmount">$65</span><span class="to"> to</span>
+      </div>
+      
+      <div class="recipient-info">
+        <img src="./images/2.Monique-32.png" alt="Recipient" class="recipient-avatar" id="selectedRecipientAvatar" loading="eager" decoding="async">
+        <span class="recipient-name" id="selectedRecipientName">Carissa T.</span>
+        <span class="recipient-for">for</span>
+      </div>
+
+      <div class="note-preview" id="notePreview"></div>
+    </div>
+    <!-- End Note Input View -->
+
+    <!-- Payment review in half sheet (shown after Continue from note step) -->
+    <!-- Apple Pay View -->
+    <div class="apple-pay-view" id="applePayView">
+      <div class="sheet-title">
+        <span>Pay </span><span class="amount" id="applePaySheetAmount">$65</span><span class="to"> to</span>
+      </div>
+      
+      <div class="recipient-info">
+        <img src="./images/2.Monique-32.png" alt="Recipient" class="recipient-avatar" id="applePayRecipientAvatar" loading="eager" decoding="async">
+        <span class="recipient-name" id="applePayRecipientName">Carissa T.</span>
+        <span class="recipient-for">for</span>
+      </div>
+
+      <div class="note-display" id="applePayNoteDisplay">Summer day trip</div>
+
+      <div class="style-it-container">
+        <button class="style-it-btn">
+          <img src="./images/style_button.png" alt="Style it" class="style-it-btn-image">
+        </button>
+      </div>
+
+      <div style="height: 24px;"></div>
+
+      <!-- Payment Method Selection -->
+      <div class="payment-method-container">
+        <div class="payment-method-row" id="paymentMethodRow" role="button" tabindex="0" aria-label="Change payment method" onclick="openChangePaymentSheet()">
+          <img src="./images/apple_pay_button.png" alt="Apple Pay" class="payment-method-logo">
+          <span class="payment-method-text"><span style="font-weight: 500;">Apple pay</span><span class="fee-text"> $1.68 fee (3%)</span></span>
+          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6L8 10L12 6" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Spacer to push disclaimer and button to bottom -->
+      <div style="flex: 1; min-height: 0;"></div>
+
+      <!-- Disclaimer -->
+      <p class="payment-disclaimer">Payments can't be canceled once they're sent.</p>
+
+      <div style="height: 20px;"></div>
+
+      <!-- Apple Pay Button Container (matches bottom-buttons structure) -->
+      <div class="apple-pay-button-container">
+        <button class="apple-pay-button-large" id="applePayButton">
+          <img src="./images/Apple_Pay-Logo.wine 1.png" alt="Apple Pay" class="apple-pay-button-logo">
+        </button>
+      </div>
+    </div>
+    <!-- End Apple Pay View -->
+
+  </div>
+  <!-- End Sheet Content -->
+
+  <!-- Note Input Section (bottom of sheet) -->
+  <div class="note-input-section">
+      <div class="note-input-container">
+        <input 
+          type="text" 
+          class="note-input" 
+          id="noteInput"
+          placeholder="Add a payment note (required)"
+          maxlength="100"
+        >
+        <button class="continue-btn" id="continueBtn">Continue</button>
+      </div>
+      
+      <!-- iOS Keyboard -->
+      <div class="ios-keyboard">
+        <!-- Keyboard Suggestions -->
+        <div class="keyboard-suggestions">
+          <div class="keyboard-suggestion">"Ios"</div>
+          <div class="keyboard-divider"></div>
+          <div class="keyboard-suggestion">iOS</div>
+          <div class="keyboard-divider"></div>
+          <div class="keyboard-suggestion">Ions</div>
+        </div>
+        
+        <!-- Keyboard Keys -->
+        <div class="keyboard-keys">
+          <!-- Top Row -->
+          <div class="keyboard-row">
+            <div class="key-letter" onclick="typeKey('Q')">Q</div>
+            <div class="key-letter" onclick="typeKey('W')">W</div>
+            <div class="key-letter" onclick="typeKey('E')">E</div>
+            <div class="key-letter" onclick="typeKey('R')">R</div>
+            <div class="key-letter" onclick="typeKey('T')">T</div>
+            <div class="key-letter" onclick="typeKey('Y')">Y</div>
+            <div class="key-letter" onclick="typeKey('U')">U</div>
+            <div class="key-letter" onclick="typeKey('I')">I</div>
+            <div class="key-letter" onclick="typeKey('O')">O</div>
+            <div class="key-letter" onclick="typeKey('P')">P</div>
+          </div>
+          
+          <!-- Middle Row -->
+          <div class="keyboard-row middle-row">
+            <div class="key-letter" onclick="typeKey('A')">A</div>
+            <div class="key-letter" onclick="typeKey('S')">S</div>
+            <div class="key-letter" onclick="typeKey('D')">D</div>
+            <div class="key-letter" onclick="typeKey('F')">F</div>
+            <div class="key-letter" onclick="typeKey('G')">G</div>
+            <div class="key-letter" onclick="typeKey('H')">H</div>
+            <div class="key-letter" onclick="typeKey('J')">J</div>
+            <div class="key-letter" onclick="typeKey('K')">K</div>
+            <div class="key-letter" onclick="typeKey('L')">L</div>
+          </div>
+          
+          <!-- Bottom Row -->
+          <div class="keyboard-row">
+            <div class="key-letter special" onclick="toggleShift()">⇧</div>
+            <div class="key-letter" onclick="typeKey('Z')">Z</div>
+            <div class="key-letter" onclick="typeKey('X')">X</div>
+            <div class="key-letter" onclick="typeKey('C')">C</div>
+            <div class="key-letter" onclick="typeKey('V')">V</div>
+            <div class="key-letter" onclick="typeKey('B')">B</div>
+            <div class="key-letter" onclick="typeKey('N')">N</div>
+            <div class="key-letter" onclick="typeKey('M')">M</div>
+            <div class="key-letter special" onclick="deleteKey()">⌫</div>
+          </div>
+          
+          <!-- Space Row -->
+          <div class="keyboard-row">
+            <div class="key-letter wide">123</div>
+            <div class="key-letter space" onclick="typeKey(' ')">space</div>
+            <div class="key-letter wide" onclick="submitNote()">Next</div>
+          </div>
+        </div>
+        
+        <!-- Emoji & Microphone -->
+        <div class="keyboard-bottom">
+          <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" class="keyboard-icon">
+            <circle cx="13.5" cy="13.5" r="12.5" stroke="#666666" stroke-width="2"/>
+            <circle cx="9.5" cy="11" r="1.5" fill="#666666"/>
+            <circle cx="17.5" cy="11" r="1.5" fill="#666666"/>
+            <path d="M8.5 16C8.5 16 10.5 18.5 13.5 18.5C16.5 18.5 18.5 16 18.5 16" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg class="keyboard-icon" viewBox="0 0 19 28" fill="none">
+            <path d="M9.5 0C7.29086 0 5.5 1.79086 5.5 4V14C5.5 16.2091 7.29086 18 9.5 18C11.7091 18 13.5 16.2091 13.5 14V4C13.5 1.79086 11.7091 0 9.5 0Z" fill="#666"/>
+            <path d="M3 12V14C3 17.866 6.13401 21 10 21H9C12.866 21 16 17.866 16 14V12H18V14C18 18.9706 13.9706 23 9 23V28H10V26H8V28H9V23C4.02944 23 0 18.9706 0 14V12H3Z" fill="#666"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <!-- End Note Input Section -->
+  </div>
+  <!-- End Contacts Sheet -->
+
+  <!-- Change Payment Method modal (opens when tapping Apple Pay row) -->
+  <div class="change-payment-backdrop" id="changePaymentBackdrop" onclick="closeChangePaymentSheet()"></div>
+  <div class="change-payment-sheet" id="changePaymentSheet">
+    <div class="sheet-status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="" style="width: 100%; height: 47px; object-fit: cover;" aria-hidden="true">
+    </div>
+    <!-- Title bar (match sign-in: close left, Get help right) -->
+    <div class="change-payment-title-bar">
+      <div class="change-payment-title-bar-left" onclick="closeChangePaymentSheet()" role="button" aria-label="Close">
+        <img src="./images/Icons/navigation/close.svg" alt="Close" style="width: 24px; height: 24px;">
+      </div>
+      <div class="change-payment-title-bar-right">
+        <button type="button">Get help</button>
+      </div>
+    </div>
+    <!-- Page header: left-aligned title (match sign-in) -->
+    <div class="change-payment-page-header">
+      <h1 class="change-payment-page-title">Change payment method</h1>
+    </div>
+    <div class="sheet-content change-payment-sheet-content">
+      <div class="change-payment-options">
+        <div class="change-payment-option selected" id="changePaymentOptionApplePay" onclick="selectPaymentMethod('apple-pay')" role="button" tabindex="0">
+          <img src="./images/apple_pay_button.png" alt="" class="change-payment-option-icon">
+          <div class="change-payment-option-text">
+            <span class="change-payment-option-title">Apple Pay</span>
+            <span class="change-payment-option-fee">Use a debit card (no fee) or a credit card (3% fee)</span>
+          </div>
+          <div class="change-payment-option-radio" aria-hidden="true"></div>
+        </div>
+        <div class="change-payment-option" id="changePaymentOptionLinkCard" onclick="selectPaymentMethod('link-card')" role="button" tabindex="0">
+          <div class="change-payment-option-icon-circle">+</div>
+          <div class="change-payment-option-text">
+            <span class="change-payment-option-title">Link new card</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="change-payment-done-wrap">
+      <button type="button" class="change-payment-done-btn" onclick="closeChangePaymentSheet()">Done</button>
+    </div>
+  </div>
+  <!-- End Change Payment Method -->
+
+    <!-- Apple Pay Confirmation Bottom Sheet -->
+    <div class="apple-pay-confirmation-backdrop" id="applePayConfirmationBackdrop"></div>
+    <div class="apple-pay-confirmation-sheet" id="applePayConfirmationSheet">
+      <img src="./images/Apple pay drawer.png" alt="Apple Pay Confirmation" class="apple-pay-drawer-image">
+      <div class="apple-pay-confirm-tap-area" id="applePayConfirmTapArea" onclick="navigateToSuccess()" role="button" aria-label="Confirm with Side Button"></div>
+    </div>
+    <img src="./images/Double Click to Pay.png" alt="Double Click to Pay" class="double-click-to-pay" id="doubleClickToPay" onclick="navigateToSuccess()" role="button" aria-label="Double click to pay, tap to continue">
+    <!-- End Apple Pay Confirmation Bottom Sheet -->
+  </div>
+  <!-- End of app-container -->
+
+  <script>
+    let amount = '0';
+    let selectedContact = null;
+    let isShiftActive = false;
+    const amountEl = document.getElementById('amount');
+    const tooltipEl = document.getElementById('tooltip');
+    const payBtn = document.getElementById('payBtn');
+    const sheetBackdrop = document.getElementById('sheetBackdrop');
+    const contactsSheet = document.getElementById('contactsSheet');
+    const contactSearchInput = document.getElementById('contactSearchInput');
+    const searchResults = document.getElementById('searchResults');
+    const contactSearchView = document.getElementById('contactSearchView');
+    const noteInput = document.getElementById('noteInput');
+    const continueBtn = document.getElementById('continueBtn');
+
+    // Check if returning with an amount
+    const urlParams = new URLSearchParams(window.location.search);
+    const returnedAmount = urlParams.get('amount');
+    if (returnedAmount) {
+      amount = returnedAmount;
+    }
+
+    // If redirected from full-page review, open sheet and show half-sheet payment review
+    if (urlParams.get('showPaymentReview') === '1') {
+      var savedNote = sessionStorage.getItem('paymentNote');
+      var savedContact = sessionStorage.getItem('selectedContact');
+      var savedAmount = sessionStorage.getItem('paymentAmount');
+      if (savedNote || savedContact) {
+        if (savedAmount) amount = savedAmount;
+        if (savedContact) try { selectedContact = JSON.parse(savedContact); } catch (e) {}
+        if (savedNote && noteInput) noteInput.value = savedNote;
+        if (continueBtn) continueBtn.classList.add('active');
+        var notePreviewEl = document.getElementById('notePreview');
+        if (notePreviewEl) { notePreviewEl.textContent = savedNote || ''; notePreviewEl.classList.toggle('has-content', !!(savedNote && savedNote.trim())); }
+        if (selectedContact) {
+          var displayName = selectedContact.name ? selectedContact.name.split(' ')[0] + ' ' + (selectedContact.name.split(' ')[1] || '').charAt(0) + '.' : 'Carissa T.';
+          var av = document.getElementById('selectedRecipientAvatar');
+          var nm = document.getElementById('selectedRecipientName');
+          if (av && selectedContact.avatar) av.src = './images/' + selectedContact.avatar;
+          if (nm) nm.textContent = displayName;
+        }
+        sheetBackdrop.classList.add('visible');
+        contactsSheet.classList.add('visible');
+        contactsSheet.classList.add('note-mode');
+        setTimeout(function() { showApplePayView(); }, 50);
+      }
+    }
+
+    function updateDisplay() {
+      if (amount === '0' || amount === '') {
+        amountEl.textContent = '$0';
+        tooltipEl.classList.remove('hidden');
+      } else {
+        amountEl.textContent = '$' + amount;
+        tooltipEl.classList.add('hidden');
+      }
+    }
+
+    function addDigit(digit) {
+      if (amount === '0') {
+        amount = digit;
+      } else {
+        const parts = amount.split('.');
+        if (parts[0].length < 7 || parts.length === 2) {
+          if (parts.length === 2 && parts[1].length >= 2) {
+            return;
+          }
+          amount += digit;
+        }
+      }
+      updateDisplay();
+    }
+
+    function addDecimal() {
+      if (!amount.includes('.')) {
+        if (amount === '0' || amount === '') {
+          amount = '0.';
+        } else {
+          amount += '.';
+        }
+        updateDisplay();
+      }
+    }
+
+    function deleteDigit() {
+      if (amount.length > 1) {
+        amount = amount.slice(0, -1);
+      } else {
+        amount = '0';
+      }
+      
+      if (amount === '0') {
+        tooltipEl.classList.remove('hidden');
+      }
+      
+      updateDisplay();
+    }
+
+    // Sheet Functions
+    function openContactsSheet() {
+      console.log('openContactsSheet called, amount:', amount);
+      console.log('sheetBackdrop:', sheetBackdrop);
+      console.log('contactsSheet:', contactsSheet);
+      
+      // Temporarily removed amount check for prototype testing
+      const displayAmount = (amount !== '0' && amount !== '') ? amount : '50';
+      document.getElementById('sheetAmount').textContent = '$' + displayAmount;
+      document.getElementById('noteSheetAmount').textContent = '$' + displayAmount;
+      sheetBackdrop.classList.add('visible');
+      contactsSheet.classList.add('visible');
+      contactsSheet.classList.remove('note-mode');
+      console.log('Sheet opened, backdrop visible:', sheetBackdrop.classList.contains('visible'));
+      console.log('Sheet visible:', contactsSheet.classList.contains('visible'));
+    }
+
+    function openChangePaymentSheet() {
+      var backdrop = document.getElementById('changePaymentBackdrop');
+      var sheet = document.getElementById('changePaymentSheet');
+      if (backdrop && sheet) {
+        backdrop.classList.add('visible');
+        requestAnimationFrame(function() { sheet.classList.add('visible'); });
+      }
+    }
+
+    function closeChangePaymentSheet() {
+      var backdrop = document.getElementById('changePaymentBackdrop');
+      var sheet = document.getElementById('changePaymentSheet');
+      if (sheet) sheet.classList.remove('visible');
+      if (backdrop) {
+        setTimeout(function() { backdrop.classList.remove('visible'); }, 300);
+      }
+    }
+
+    function selectPaymentMethod(methodId) {
+      var appleOpt = document.getElementById('changePaymentOptionApplePay');
+      var linkOpt = document.getElementById('changePaymentOptionLinkCard');
+      if (appleOpt && linkOpt) {
+        appleOpt.classList.toggle('selected', methodId === 'apple-pay');
+        linkOpt.classList.toggle('selected', methodId === 'link-card');
+      }
+    }
+
+    function closeAllSheets() {
+      closeChangePaymentSheet();
+      sheetBackdrop.classList.remove('visible');
+      contactsSheet.classList.remove('visible');
+      contactsSheet.classList.remove('note-mode');
+      contactsSheet.classList.remove('apple-pay-mode');
+      
+      // Reset search
+      contactSearchInput.value = '';
+      searchResults.classList.remove('visible');
+      contactSearchView.classList.remove('searching');
+      
+      // Clear note input and preview
+      noteInput.value = '';
+      var notePreviewEl = document.getElementById('notePreview');
+      if (notePreviewEl) { notePreviewEl.textContent = ''; notePreviewEl.classList.remove('has-content'); }
+      continueBtn.classList.remove('active');
+      
+      // Show note input section again
+      const noteInputSection = document.querySelector('.note-input-section');
+      if (noteInputSection) {
+        noteInputSection.style.display = '';
+      }
+    }
+
+    function handleSheetBack() {
+      if (contactsSheet.classList.contains('apple-pay-mode')) {
+        // Go back from Apple Pay view to note input
+        contactsSheet.classList.remove('apple-pay-mode');
+        contactsSheet.classList.add('note-mode');
+        
+        // Show note input section again
+        const noteInputSection = document.querySelector('.note-input-section');
+        if (noteInputSection) {
+          noteInputSection.style.display = '';
+        }
+      } else if (contactsSheet.classList.contains('note-mode')) {
+        // Go back to contact search view
+        contactsSheet.classList.remove('note-mode');
+        noteInput.value = '';
+        var notePreviewEl = document.getElementById('notePreview');
+        if (notePreviewEl) { notePreviewEl.textContent = ''; notePreviewEl.classList.remove('has-content'); }
+        continueBtn.classList.remove('active');
+      } else {
+        // Close the sheet entirely
+        closeAllSheets();
+      }
+    }
+
+    // Contact search functionality
+    contactSearchInput.addEventListener('input', function(e) {
+      const searchTerm = e.target.value.trim();
+      
+      if (searchTerm.length > 0) {
+        searchResults.classList.add('visible');
+        contactSearchView.classList.add('searching');
+      } else {
+        searchResults.classList.remove('visible');
+        contactSearchView.classList.remove('searching');
+      }
+    });
+
+    // Contact selection
+    function selectContact(name, cashtag, avatar) {
+      selectedContact = {
+        name: name,
+        cashtag: cashtag,
+        avatar: avatar
+      };
+      
+      const displayName = name.split(' ')[0] + ' ' + name.split(' ')[1].charAt(0) + '.';
+      
+      document.getElementById('selectedRecipientName').textContent = displayName;
+      document.getElementById('selectedRecipientAvatar').src = './images/' + avatar;
+      
+      // Transition to note mode within the same sheet
+      contactsSheet.classList.add('note-mode');
+      
+      // Focus on note input quickly
+      setTimeout(() => {
+        noteInput.focus();
+      }, 100);
+    }
+
+    // Note input functionality (no live preview - only Continue button state)
+    noteInput.addEventListener('input', function() {
+      const noteText = noteInput.value;
+      if (noteText.length > 0) {
+        continueBtn.classList.add('active');
+      } else {
+        continueBtn.classList.remove('active');
+      }
+    });
+
+    continueBtn.addEventListener('click', function() {
+      if (continueBtn.classList.contains('active')) {
+        submitNote();
+      }
+    });
+
+    // Keyboard functionality
+    function typeKey(char) {
+      const currentValue = noteInput.value;
+      const newChar = isShiftActive ? char.toUpperCase() : char.toLowerCase();
+      noteInput.value = currentValue + newChar;
+      
+      noteInput.dispatchEvent(new Event('input'));
+      
+      if (isShiftActive && char !== ' ') {
+        isShiftActive = false;
+      }
+    }
+
+    function deleteKey() {
+      const currentValue = noteInput.value;
+      noteInput.value = currentValue.slice(0, -1);
+      noteInput.dispatchEvent(new Event('input'));
+    }
+
+    function toggleShift() {
+      isShiftActive = !isShiftActive;
+    }
+
+    function submitNote() {
+      if (noteInput.value.trim().length > 0) {
+        sessionStorage.setItem('paymentNote', noteInput.value);
+        sessionStorage.setItem('paymentAmount', amount);
+        sessionStorage.setItem('selectedContact', JSON.stringify(selectedContact));
+        
+        // Show payment review in the half sheet (Apple Pay view)
+        showApplePayView();
+      }
+    }
+
+    function showApplePayView() {
+      // Update Apple Pay view with current data
+      const displayAmount = (amount !== '0' && amount !== '') ? amount : '65';
+      document.getElementById('applePaySheetAmount').textContent = '$' + displayAmount;
+      
+      // Update recipient info - use the same data from note-input-view
+      const noteRecipientAvatar = document.getElementById('selectedRecipientAvatar');
+      const noteRecipientName = document.getElementById('selectedRecipientName');
+      const applePayRecipientAvatar = document.getElementById('applePayRecipientAvatar');
+      const applePayRecipientName = document.getElementById('applePayRecipientName');
+      
+      if (noteRecipientAvatar && applePayRecipientAvatar) {
+        applePayRecipientAvatar.src = noteRecipientAvatar.src;
+      }
+      if (noteRecipientName && applePayRecipientName) {
+        applePayRecipientName.textContent = noteRecipientName.textContent;
+      }
+      
+      // Update note display (e.g. "Summer day trip" or "for Summer day trip")
+      const noteDisplay = document.getElementById('applePayNoteDisplay');
+      const noteText = noteInput.value.trim();
+      if (noteDisplay) {
+        noteDisplay.textContent = noteText ? noteText : '';
+      }
+      
+      // Hide keyboard / note input section so payment review is visible
+      const noteInputSection = document.querySelector('.note-input-section');
+      if (noteInputSection) {
+        noteInputSection.style.display = 'none';
+      }
+      
+      // Transition to Apple Pay view
+      // Use requestAnimationFrame to ensure smooth transition
+      requestAnimationFrame(() => {
+        contactsSheet.classList.remove('note-mode');
+        contactsSheet.classList.add('apple-pay-mode');
+      });
+    }
+
+    // Pay button functionality
+    payBtn.addEventListener('click', function() {
+      console.log('Pay button clicked!');
+      console.log('Amount:', amount);
+      openContactsSheet();
+    });
+
+    // Apple Pay button functionality
+    const applePayButton = document.getElementById('applePayButton');
+    if (applePayButton) {
+      applePayButton.addEventListener('click', function() {
+        // Show Apple Pay confirmation screen
+        console.log('Apple Pay button clicked!');
+        showApplePayConfirmation();
+      });
+    }
+
+    function showApplePayConfirmation() {
+      // Calculate total amount (base amount + 3% fee)
+      const baseAmount = parseFloat(amount) || 65;
+      const fee = baseAmount * 0.03;
+      const totalAmount = baseAmount + fee;
+      
+      // Update confirmation amount
+      const confirmationAmountEl = document.getElementById('applePayConfirmationAmount');
+      if (confirmationAmountEl) {
+        confirmationAmountEl.textContent = totalAmount.toFixed(2);
+      }
+      
+      // Show backdrop and sheet
+      const backdrop = document.getElementById('applePayConfirmationBackdrop');
+      const sheet = document.getElementById('applePayConfirmationSheet');
+      const doubleClickButton = document.getElementById('doubleClickToPay');
+      
+      if (backdrop && sheet) {
+        backdrop.classList.add('visible');
+        // Use requestAnimationFrame to ensure backdrop is visible before animating sheet
+        requestAnimationFrame(() => {
+          sheet.classList.add('visible');
+          // Animate the double click button after sheet appears
+          setTimeout(() => {
+            if (doubleClickButton) {
+              doubleClickButton.classList.add('visible');
+            }
+          }, 300);
+        });
+      }
+    }
+
+    function closeApplePayConfirmation() {
+      const backdrop = document.getElementById('applePayConfirmationBackdrop');
+      const sheet = document.getElementById('applePayConfirmationSheet');
+      const doubleClickButton = document.getElementById('doubleClickToPay');
+      
+      if (backdrop && sheet) {
+        // Hide double click button first
+        if (doubleClickButton) {
+          doubleClickButton.classList.remove('visible');
+        }
+        sheet.classList.remove('visible');
+        // Wait for sheet animation to complete before hiding backdrop
+        setTimeout(() => {
+          backdrop.classList.remove('visible');
+        }, 400);
+      }
+    }
+
+    function navigateToSuccess() {
+      window.location.href = 'success.html';
+    }
+
+    // Initialize display
+    updateDisplay();
+  </script>
+</body>
+</html>
