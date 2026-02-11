@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Success - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <style>
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #595959;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: #000000;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: auto;
+    }
+
+    .top-nav {
+      position: absolute;
+      top: 63px;
+      left: 17px;
+      z-index: 100;
+      animation: fadeInUp 0.4s ease-out both;
+    }
+
+    .glass-close {
+      width: 44px;
+      height: 44px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+    }
+
+    .glass-close:active {
+      opacity: 0.7;
+    }
+
+    .hero-title {
+      position: absolute;
+      top: 125px;
+      left: 16px;
+      right: 16px;
+      font-family: var(--font-family);
+      font-size: 56px;
+      font-weight: 400;
+      line-height: 56px;
+      letter-spacing: -2.24px;
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    .hero-title .gray {
+      color: #595959;
+    }
+
+    .hero-title .white {
+      color: #FFFFFF;
+    }
+
+    .video-container {
+      position: absolute;
+      top: 280px;
+      left: 0;
+      right: 0;
+      width: 280px;
+      height: 400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cta-container {
+      position: absolute;
+      bottom: 34px;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      z-index: 10;
+      animation: fadeInUp 0.5s ease-out 0.3s both;
+    }
+
+    .next-button {
+      width: 100%;
+      height: 56px;
+      background-color: #2C2C2E;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 9999px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .next-button:active {
+      opacity: 0.8;
+    }
+
+    .home-indicator-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 34px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+    }
+
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: #FFFFFF;
+      border-radius: 100px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar (White for dark background) -->
+    <div class="status-bar">
+      <img src="./images/White - Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Glass Close Button -->
+    <div class="top-nav">
+      <button class="glass-close" onclick="goNext()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L5 15M5 5L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hero Title -->
+    <div class="hero-title">
+      <span class="gray">Nice, you just </span><span class="white" id="amountText">sent $65</span>
+    </div>
+
+    <!-- Video -->
+    <div class="video-container">
+      <video id="successVideo" autoplay loop muted playsinline webkit-playsinline>
+        <source src="./images/cb8ad675-8537-4823-bc22-e1bfd5726251-SH010_Carousel_EDU_Borrow_01_v13_AOV_Beauty-2.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Next Button -->
+    <div class="cta-container">
+      <button class="next-button" onclick="goNext()">Finish account setup</button>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator-container">
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+
+  <script>
+    var amount = '66.68';
+    document.getElementById('amountText').textContent = 'sent $' + amount;
+
+    // Ensure video plays
+    var video = document.getElementById('successVideo');
+    if (video) {
+      video.play().catch(function() {
+        // Retry on user interaction if autoplay blocked
+        document.addEventListener('click', function() {
+          video.play();
+        }, { once: true });
+      });
+    }
+
+    function goNext() {
+      sessionStorage.clear();
+      window.location.href = 'after-skip.html';
+    }
+  </script>
+</body>
+</html>
