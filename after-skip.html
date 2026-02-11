@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's Next - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Semibold.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <style>
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-bg-gray: #f0f0f0;
+      --cash-subtle-gray: #666666;
+      --cash-blue: #0A84FF;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-weight: 500;
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .restart-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .restart-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+      background-color: var(--cash-white);
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cash-white);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-white);
+      flex-shrink: 0;
+    }
+
+    .close-btn {
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .close-btn:active {
+      opacity: 0.6;
+    }
+
+    .close-btn img {
+      width: 20.035px;
+      height: 20.035px;
+      filter: brightness(0);
+    }
+
+    .more-btn {
+      width: 32px;
+      height: 32px;
+      background-color: var(--cash-bg-gray);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .more-btn:active {
+      opacity: 0.6;
+    }
+
+    .more-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Scrollable Content */
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 16px;
+      padding-bottom: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scrollable-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollable-content {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Greeting */
+    .greeting {
+      margin-top: 16px;
+      margin-bottom: 32px;
+      animation: slideUp 0.4s ease-out 0.1s both;
+    }
+
+    .greeting-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      text-align: left;
+      width: 300px;
+    }
+
+    /* Suggestion Cards */
+    .suggestion-cards {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .suggestion-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      height: 120px;
+      border-bottom: 1px solid var(--cash-light-gray);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .suggestion-card:last-child {
+      border-bottom: none;
+    }
+
+    .suggestion-card:active {
+      opacity: 0.7;
+    }
+
+    .suggestion-card:nth-child(1) {
+      animation: slideUp 0.4s ease-out 0.2s both;
+    }
+
+    .suggestion-card:nth-child(2) {
+      animation: slideUp 0.4s ease-out 0.3s both;
+    }
+
+    .suggestion-card:nth-child(3) {
+      animation: slideUp 0.4s ease-out 0.4s both;
+    }
+
+    /* Card Icon */
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .card-icon.look-around img {
+      object-fit: contain;
+      padding: 2px;
+    }
+
+    /* Card Content */
+    .card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .card-label {
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0px;
+      color: #666666;
+      width: 220px;
+    }
+
+    .card-description {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0px;
+      color: var(--cash-black);
+      width: 220px;
+    }
+
+    /* Card Arrow */
+    .card-arrow {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cash-black);
+    }
+
+    .card-arrow svg {
+      width: 12px;
+      height: 16px;
+    }
+
+    /* Bottom Section: Cards + Input grouped together */
+    .bottom-section {
+      flex-shrink: 0;
+      padding: 0 16px;
+      padding-bottom: 50px;
+      background-color: var(--cash-white);
+    }
+
+    /* Bottom Input Bar */
+    .input-bar-container {
+      padding-top: 0px;
+      animation: slideUp 0.4s ease-out 0.5s both;
+    }
+
+    .input-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #f7f7f7;
+      color: #f7f7f7;
+      border: 1.5px solid #f7f7f7;
+      border-radius: 50px;
+      padding: 8px 8px 8px 16px;
+      transition: border-color 0.2s;
+    }
+
+    .input-bar:focus-within {
+      border-color: var(--cash-black);
+    }
+
+    .input-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+      background: transparent;
+    }
+
+    .input-field::placeholder {
+      color: var(--cash-gray);
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(0, 0, 0, 1);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .send-btn:active {
+      transform: scale(0.92);
+    }
+
+    .send-btn svg {
+      width: 18px;
+      height: 18px;
+      color: var(--cash-white);
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+      margin: 0 auto;
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body>
+  <a href="welcome.html" class="restart-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 7C13 10.3137 10.3137 13 7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C8.6 1 10.04 1.67 11.08 2.74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 1V3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Restart
+  </a>
+  
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+      <!-- Top Navigation Bar -->
+      <div class="top-bar">
+        <button class="close-btn" onclick="handleClose()" aria-label="Close">
+          <img src="./images/Icons/navigation/close.svg" alt="Close">
+        </button>
+      </div>
+      <!-- Scrollable Content -->
+      <div class="scrollable-content">
+        <!-- Greeting -->
+        <div class="greeting">
+          <h1 class="greeting-title">You just sent your first payment to Carissa. What's next?</h1>
+        </div>
+      </div>
+
+      <!-- Bottom Section: Cards + Input -->
+      <div class="bottom-section">
+        <!-- Suggestion Cards -->
+        <div class="suggestion-cards">
+          <!-- Create shortcuts -->
+          <div class="suggestion-card" onclick="handleCreateShortcuts()">
+            <div class="card-icon">
+              <img src="./images/p2p@3x.png" alt="Create shortcuts">
+            </div>
+            <div class="card-content">
+              <div class="card-label">Create shortcuts</div>
+              <div class="card-description">Sending money to Carissa regularly? Add them to your favorites.</div>
+            </div>
+            <div class="card-arrow">
+              <svg width="10" height="15" viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 14V1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M1 5L5 1L9 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Sync contacts -->
+          <div class="suggestion-card" onclick="handleCardUpgrade()">
+            <div class="card-icon">
+              <img src="./images/Sync contacts moneybot.png" alt="Sync contacts">
+            </div>
+            <div class="card-content">
+              <div class="card-label">Sync contacts</div>
+              <div class="card-description">See who else you know on Cash App.</div>
+            </div>
+            <div class="card-arrow">
+              <svg width="10" height="15" viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 14V1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M1 5L5 1L9 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Look Around -->
+          <div class="suggestion-card" onclick="handleLookAround()">
+            <div class="card-icon look-around">
+              <img src="./images/explore.png" alt="Look around">
+            </div>
+            <div class="card-content">
+              <div class="card-label">Look around</div>
+              <div class="card-description">There are a few ways to get started. Take a tour?</div>
+            </div>
+            <div class="card-arrow">
+              <svg width="10" height="15" viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 14V1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M1 5L5 1L9 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="input-bar-container">
+          <div class="input-bar">
+            <input type="text" class="input-field" id="chatInput" placeholder="I want to...." autocomplete="off">
+            <button class="send-btn" onclick="handleSend()" aria-label="Send">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 8L9 3L14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Home Indicator - fixed at bottom of screen -->
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+
+  <script>
+    function handleClose() {
+      // Restart prototype: go back to welcome screen
+      window.location.href = 'welcome.html';
+    }
+
+    function handleMore() {
+      // Show more options menu
+      console.log('More options');
+    }
+
+    function handleCreateShortcuts() {
+      // Handle create shortcuts suggestion
+      console.log('Create shortcuts selected');
+    }
+
+    function handleCardUpgrade() {
+      // Handle card upgrade suggestion
+      console.log('Card upgrade selected');
+    }
+
+    function handleLookAround() {
+      // Handle look around suggestion
+      console.log('Look around selected');
+    }
+
+    function handleSend() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (message) {
+        console.log('Send message:', message);
+        input.value = '';
+      }
+    }
+
+    // Handle Enter key in input
+    document.getElementById('chatInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        handleSend();
+      }
+    });
+  </script>
+</body>
+</html>
