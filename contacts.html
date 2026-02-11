@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Contacts - Cash App</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./images/2.Monique-32.png" as="image">
+  
+  <!-- Prefetch next pages -->
+  <link rel="prefetch" href="review.html">
+  
+  <script>
+    // Redirect to keypad.html since contacts are now handled in a sheet
+    window.location.href = 'keypad.html';
+  </script>
+  <style>
+    /* ===== Cash Sans Font Faces ===== */
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cash Sans';
+      src: url('./fonts/CashSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== CSS Variables - Cash App Style ===== */
+    :root {
+      --cash-black: #000000;
+      --cash-white: #FFFFFF;
+      --cash-gray: #959595;
+      --cash-light-gray: #e8e8e8;
+      --cash-bg-gray: #f0f0f0;
+      --cash-subtle-gray: #666666;
+      --font-family: 'Cash Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Remove blue highlight on inputs */
+    input, textarea, button, select {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      background-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #1E1E1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .app-container {
+      width: 390px;
+      height: 844px;
+      background-color: var(--cash-white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .status-bar img {
+      width: 100%;
+      height: 47px;
+      object-fit: cover;
+    }
+
+    /* Title Bar */
+    .title-bar {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--cash-white);
+      animation: slideInUpFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.15s backwards;
+    }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cash-white);
+      animation: slideUpFromBottom 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      position: relative;
+    }
+
+    .main-container.exit {
+      animation: slideOutDown 0.15s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+    }
+
+    @keyframes slideUpFromBottom {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideOutDown {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(100%);
+      }
+    }
+
+    @keyframes slideInFromRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutToRight {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .title-bar-left {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .title-bar-left svg,
+    .title-bar-left img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) saturate(100%);
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      animation: slideInUpFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.15s backwards;
+    }
+
+    @keyframes slideInUpFade {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInFromRightFade {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .spacer-medium {
+      height: 16px;
+    }
+
+    .spacer-small {
+      height: 8px;
+    }
+
+    .spacer-medium-large {
+      height: 24px;
+    }
+
+    .spacer-large {
+      height: 32px;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-top: 16px;
+    }
+
+    .page-title {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin-bottom: 8px;
+    }
+
+    .page-title .amount {
+      color: var(--cash-black);
+    }
+
+    .page-title .to {
+      color: var(--cash-gray);
+    }
+
+    /* Search Bar */
+    .search-container {
+      background-color: var(--cash-white);
+      padding: 8px 16px;
+      margin: 0 -16px;
+    }
+
+    .search-field {
+      background-color: #f0f0f0;
+      border-radius: 9999px;
+      padding: 6px 8px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .search-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-icon img {
+      width: 18.207px;
+      height: 18.207px;
+    }
+
+    .search-icon svg {
+      width: 18.207px;
+      height: 18.207px;
+    }
+
+    .search-input {
+      flex: 1;
+      background: none;
+      border: none;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: #666666;
+    }
+
+    /* Upsell Card */
+    .upsell-card {
+      background-color: var(--cash-white);
+      border: 1px solid var(--cash-light-gray);
+      border-radius: 40px;
+      padding: 24px;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contacts-icon {
+      width: 97px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+    }
+
+    .contacts-icon video,
+    .contacts-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.3);
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+      padding-bottom: 8px;
+    }
+
+    .card-body {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: 0.08px;
+      color: var(--cash-subtle-gray);
+    }
+
+    .sync-button {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0.035px;
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+      border: none;
+      border-radius: 9999px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      align-self: flex-start;
+    }
+
+    .sync-button:active {
+      opacity: 0.7;
+    }
+
+    /* Contact Results */
+    .search-results {
+      display: none;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .search-results.visible {
+      display: flex;
+      animation: fadeInUp 0.3s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-header {
+      padding: 0 16px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: var(--font-family);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+      color: var(--cash-black);
+    }
+
+    .contact-cell {
+      height: 80px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .contact-cell:active {
+      background-color: var(--cash-bg-gray);
+    }
+
+    .contact-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .contact-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-name {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0;
+      color: var(--cash-black);
+    }
+
+    .contact-cashtag {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: 0.08px;
+      color: var(--cash-subtle-gray);
+    }
+
+    /* Hide upsell when searching */
+    .content.searching .upsell-card {
+      display: none;
+    }
+
+    /* Note state styles */
+    .content.note-mode .search-container,
+    .content.note-mode .search-results,
+    .content.note-mode .upsell-card {
+      display: none;
+    }
+
+    .content.note-mode .page-header {
+      margin-bottom: 8px;
+    }
+
+    .content.review-mode .page-header {
+      margin-bottom: 8px;
+    }
+
+    .recipient-info {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .content.note-mode .recipient-info,
+    .content.review-mode .recipient-info {
+      display: flex;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .recipient-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .recipient-name {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+    }
+
+    .recipient-for {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-gray);
+    }
+
+    /* Payment Note Display (shown in note mode and review mode) */
+    .payment-note-display {
+      display: none;
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 32px;
+      letter-spacing: -0.48px;
+      color: var(--cash-black);
+      margin-top: 8px;
+    }
+
+    .content.note-mode .payment-note-display,
+    .content.review-mode .payment-note-display {
+      display: block;
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    /* Review CTA Section */
+    .review-cta-section {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--cash-white);
+      padding: 16px 16px 50px 16px;
+    }
+
+    .content.review-mode .review-cta-section {
+      display: block;
+    }
+
+    /* Payment Instrument */
+    .payment-instrument {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+    }
+
+    .visa-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .instrument-text {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      color: var(--cash-black);
+      flex: 1;
+    }
+
+    .expand-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Payment Disclaimer */
+    .payment-disclaimer {
+      font-family: 'Cash Sans Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0px;
+      color: var(--cash-subtle-gray);
+      text-align: center;
+    }
+
+    .style-it-container {
+      display: none;
+      padding-top: 16px;
+    }
+
+    .content.review-mode .style-it-container {
+      display: block;
+    }
+
+    .style-it-btn {
+      background-color: #F5F5F5;
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 24px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      color: var(--cash-black);
+      cursor: pointer;
+    }
+
+    .cta-button-container {
+      padding: 0;
+    }
+
+    .review-continue-btn {
+      width: 100%;
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+      border: none;
+      border-radius: 9999px;
+      padding: 14px 24px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .review-continue-btn:active {
+      opacity: 0.8;
+    }
+
+    /* Hide elements in review mode */
+    .content.review-mode .search-container,
+    .content.review-mode .upsell-card,
+    .content.review-mode .search-results {
+      display: none;
+    }
+
+    /* Note Input Section */
+    .note-section {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--cash-light-gray);
+      flex-direction: column;
+      background-color: var(--cash-white);
+      opacity: 0;
+    }
+
+    .content.note-mode .note-section {
+      display: flex;
+      animation: slideUpFadeIn 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    }
+
+    @keyframes slideUpFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUpFromBottom {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideDownOut {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+    }
+
+    /* Contact selection transition animations */
+    @keyframes searchOutUp {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-16px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes xIconOut {
+      0% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+      25% {
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(-45deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes backIconIn {
+      from {
+        transform: rotate(45deg);
+        opacity: 0;
+      }
+      to {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes recipientNoteIn {
+      from {
+        transform: translateY(8px);
+        opacity: 0.05;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Reverse animations for going back to search */
+    @keyframes backIconOut {
+      from {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+      to {
+        transform: rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes xIconIn {
+      0% {
+        transform: rotate(-45deg);
+        opacity: 0;
+      }
+      75% {
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    /* Animation classes */
+    .search-container.fade-out,
+    .search-results.fade-out {
+      animation: searchOutUp 200ms cubic-bezier(0.3, 0.0, 1.0, 1.0) forwards;
+    }
+
+    #closeIcon.fade-out {
+      animation: xIconOut 200ms cubic-bezier(0.3, 0.0, 1.0, 1.0) forwards;
+    }
+
+    #closeIcon.fade-in {
+      animation: xIconIn 200ms cubic-bezier(0.3, 0.0, 1.0, 1.0) forwards;
+    }
+
+    #backArrow.fade-in {
+      animation: backIconIn 250ms cubic-bezier(0.0, 0.0, 0.0, 1.0) forwards;
+    }
+
+    #backArrow.fade-out {
+      animation: backIconOut 250ms cubic-bezier(0.0, 0.0, 0.0, 1.0) forwards;
+    }
+
+    .recipient-info.animate-in,
+    .note-section.animate-in {
+      animation: recipientNoteIn 250ms cubic-bezier(0.0, 0.0, 0.0, 1.0) forwards;
+    }
+
+    .note-input-container {
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background-color: var(--cash-white);
+    }
+
+    .note-input {
+      flex: 1;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.08px;
+      color: var(--cash-black);
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    .note-input::placeholder {
+      color: var(--cash-subtle-gray);
+    }
+
+    .continue-btn {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0px;
+      background-color: rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .continue-btn.active {
+      background-color: var(--cash-black);
+      color: var(--cash-white);
+    }
+
+    .continue-btn:active {
+      opacity: 0.7;
+    }
+
+    /* iOS Keyboard */
+    .ios-keyboard {
+      width: 100%;
+      background-color: #d1d3d9;
+      backdrop-filter: blur(54.366px);
+      padding: 0 3px;
+      padding-bottom: 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .keyboard-suggestions {
+      height: 46px;
+      background-color: #d1d3d9;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 1px;
+    }
+
+    .keyboard-suggestion {
+      flex: 1;
+      text-align: center;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 17px;
+      line-height: 22px;
+      letter-spacing: -0.408px;
+      color: #000000;
+    }
+
+    .keyboard-divider {
+      width: 1px;
+      height: 25px;
+      background-color: #aeaeb2;
+      opacity: 0.5;
+    }
+
+    .keyboard-keys {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 3px;
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .keyboard-row.middle-row {
+      padding: 0 16px;
+    }
+
+    .key {
+      background: white;
+      border-radius: 4.6px;
+      height: 42px;
+      min-width: 32px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'SF Pro Display', -apple-system, sans-serif;
+      font-size: 22px;
+      line-height: 28px;
+      letter-spacing: 0.35px;
+      color: #000000;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+
+    .key:active {
+      background: #d1d5db;
+    }
+
+    .key.special {
+      background: #abb0bc;
+      min-width: 42px;
+      max-width: 42px;
+      font-size: 20px;
+    }
+
+    .key.wide {
+      flex: 2.7;
+      min-width: 91px;
+      background: #abb0bc;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 21px;
+      letter-spacing: -0.32px;
+    }
+
+    .key.space {
+      flex: 5;
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 21px;
+      letter-spacing: -0.32px;
+    }
+
+    .keyboard-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      margin-top: 13px;
+      margin-bottom: 8px;
+    }
+
+    .keyboard-icon {
+      width: 27px;
+      height: 27px;
+      cursor: pointer;
+    }
+
+    /* Slide out animation for contact selection */
+    .main-container.slide-out {
+      animation: slideOutDown 0.3s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+    }
+
+    @keyframes slideOutDown {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(100%);
+      }
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 134px;
+      height: 5px;
+      background-color: var(--cash-black);
+      border-radius: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+    </div>
+
+    <!-- Main Container (wraps everything that should slide) -->
+    <div class="main-container">
+      <!-- Title Bar -->
+      <div class="title-bar">
+        <div class="title-bar-left" onclick="goBack()">
+          <!-- Close Icon (X) - shown in search state -->
+          <img id="closeIcon" src="./images/Icons/navigation/close.svg" alt="Close" style="width: 24px; height: 24px;">
+          <!-- Back Arrow - shown in note state -->
+          <img id="backArrow" src="./images/Icons/navigation/back.svg" alt="Back" style="display: none; width: 24px; height: 24px;">
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <div class="spacer-medium"></div>
+        
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">
+          <span class="text">Pay </span><span class="amount" id="displayAmount">$65</span><span class="to"> to</span>
+        </h1>
+      </div>
+
+      <!-- Recipient Info (shown in note mode) -->
+      <div class="recipient-info" id="recipientInfo">
+        <img src="./images/2.Monique-32.png" alt="Recipient" class="recipient-avatar" id="recipientAvatar" loading="eager" decoding="async">
+        <span class="recipient-name" id="recipientName">Carissa T.</span>
+        <span class="recipient-for">for</span>
+      </div>
+
+      <!-- Payment Note Display (shown in review mode) -->
+      <div class="payment-note-display" id="paymentNoteDisplay"></div>
+
+      <!-- Style It Button (shown in review mode) -->
+      <div class="style-it-container" id="styleItContainer">
+        <button class="style-it-btn">Style it</button>
+      </div>
+
+      <div class="spacer-medium"></div>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-field">
+          <div class="search-icon">
+            <svg width="18.207" height="18.207" viewBox="0 0 18.207 18.207" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7.5" cy="7.5" r="6.5" stroke="#666666" stroke-width="2"/>
+              <line x1="12.5" y1="12.5" x2="17.5" y2="17.5" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <input type="text" class="search-input" placeholder="Name, $cashtag, email, phone...">
+        </div>
+      </div>
+
+      <div class="spacer-medium"></div>
+
+      <!-- Upsell Card -->
+      <div class="upsell-card">
+        <div class="contacts-icon">
+          <video autoplay muted playsinline poster="./images/sync contacts.png">
+            <source src="./images/Contacts video.mp4" type="video/mp4">
+            <img src="./images/sync contacts.png" alt="Sync Contacts">
+          </video>
+        </div>
+        <div class="card-content">
+          <div class="card-title">Find people you know on Cash App</div>
+          <div class="card-body">Allow access to your contacts to find friends and make sure you're paying the right person.</div>
+          <button class="sync-button">Sync contacts</button>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      <div class="search-results" id="searchResults">
+        <div class="section-header">
+          <div class="section-title">Select a recipient</div>
+        </div>
+        <div class="contact-cell" onclick="selectContact('Carissa Thompson', '$cariss', '2.Monique-32.png')">
+          <img src="./images/2.Monique-32.png" alt="Carissa Thompson" class="contact-avatar" loading="eager" decoding="async">
+          <div class="contact-info">
+            <div class="contact-name">Carissa Thompson</div>
+            <div class="contact-cashtag">$cariss</div>
+          </div>
+        </div>
+        <div class="contact-cell" onclick="selectContact('Carter Collins', '$coconut', '2.Monique-32.png')">
+          <img src="./images/2.Monique-32.png" alt="Carter Collins" class="contact-avatar" loading="eager" decoding="async">
+          <div class="contact-info">
+            <div class="contact-name">Carter Collins</div>
+            <div class="contact-cashtag">$coconut</div>
+          </div>
+        </div>
+        <div class="contact-cell" onclick="selectContact('Claire Cooper', '$carrot', '2.Monique-32.png')">
+          <img src="./images/2.Monique-32.png" alt="Claire Cooper" class="contact-avatar" loading="eager" decoding="async">
+          <div class="contact-info">
+            <div class="contact-name">Claire Cooper</div>
+            <div class="contact-cashtag">$carrot</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review CTA Section (shown in review mode) -->
+      <div class="review-cta-section" id="reviewCtaSection">
+        <!-- Card Information -->
+        <div class="payment-instrument">
+          <div class="visa-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="20" height="20" fill="#1A1F71"/>
+              <path d="M8.5 6.5L7.5 13.5H6L7 6.5H8.5Z" fill="white"/>
+              <path d="M13 6.5L11.5 11L10.5 6.5H9L10.5 13.5H12L14.5 6.5H13Z" fill="white"/>
+            </svg>
+          </div>
+          <span class="instrument-text">Visa debit 7829</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="expand-icon">
+            <path d="M4 6L8 10L12 6" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        
+        <div class="spacer-medium-large"></div>
+        
+        <!-- Disclaimer -->
+        <div class="payment-disclaimer">
+          Payments can't be canceled once they're sent.
+        </div>
+        
+        <div class="spacer-large"></div>
+        
+        <!-- Continue Button -->
+        <div class="cta-button-container">
+          <button class="review-continue-btn" id="reviewContinueBtn">Send payment</button>
+        </div>
+      </div>
+
+      <!-- Note Section (shown in note mode) -->
+      <div class="note-section" id="noteSection">
+        <div class="note-input-container">
+          <input 
+            type="text" 
+            class="note-input" 
+            id="noteInput"
+            placeholder="Add a payment note (required)"
+            maxlength="100"
+          >
+          <button class="continue-btn" id="continueBtn">Continue</button>
+        </div>
+
+        <!-- iOS Keyboard -->
+        <div class="ios-keyboard">
+          <!-- Keyboard Suggestions -->
+          <div class="keyboard-suggestions">
+            <div class="keyboard-suggestion">"Ios"</div>
+            <div class="keyboard-divider"></div>
+            <div class="keyboard-suggestion">iOS</div>
+            <div class="keyboard-divider"></div>
+            <div class="keyboard-suggestion">Ions</div>
+          </div>
+
+          <!-- Keyboard Keys -->
+          <div class="keyboard-keys">
+            <!-- Top Row: QWERTYUIOP -->
+            <div class="keyboard-row">
+              <div class="key" onclick="typeKey('Q')">Q</div>
+              <div class="key" onclick="typeKey('W')">W</div>
+              <div class="key" onclick="typeKey('E')">E</div>
+              <div class="key" onclick="typeKey('R')">R</div>
+              <div class="key" onclick="typeKey('T')">T</div>
+              <div class="key" onclick="typeKey('Y')">Y</div>
+              <div class="key" onclick="typeKey('U')">U</div>
+              <div class="key" onclick="typeKey('I')">I</div>
+              <div class="key" onclick="typeKey('O')">O</div>
+              <div class="key" onclick="typeKey('P')">P</div>
+            </div>
+
+            <!-- Middle Row: ASDFGHJKL -->
+            <div class="keyboard-row middle-row">
+              <div class="key" onclick="typeKey('A')">A</div>
+              <div class="key" onclick="typeKey('S')">S</div>
+              <div class="key" onclick="typeKey('D')">D</div>
+              <div class="key" onclick="typeKey('F')">F</div>
+              <div class="key" onclick="typeKey('G')">G</div>
+              <div class="key" onclick="typeKey('H')">H</div>
+              <div class="key" onclick="typeKey('J')">J</div>
+              <div class="key" onclick="typeKey('K')">K</div>
+              <div class="key" onclick="typeKey('L')">L</div>
+            </div>
+
+            <!-- Bottom Row: Shift + ZXCVBNM + Delete -->
+            <div class="keyboard-row">
+              <div class="key special" onclick="toggleShift()">⇧</div>
+              <div class="key" onclick="typeKey('Z')">Z</div>
+              <div class="key" onclick="typeKey('X')">X</div>
+              <div class="key" onclick="typeKey('C')">C</div>
+              <div class="key" onclick="typeKey('V')">V</div>
+              <div class="key" onclick="typeKey('B')">B</div>
+              <div class="key" onclick="typeKey('N')">N</div>
+              <div class="key" onclick="typeKey('M')">M</div>
+              <div class="key special" onclick="deleteKey()">⌫</div>
+            </div>
+
+            <!-- Bottom Row: 123, space, Next -->
+            <div class="keyboard-row">
+              <div class="key wide" onclick="switchToNumbers()">123</div>
+              <div class="key space" onclick="typeKey(' ')">space</div>
+              <div class="key wide" onclick="submitNote()">Next</div>
+            </div>
+          </div>
+
+          <!-- Emoji & Microphone -->
+          <div class="keyboard-bottom">
+            <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" class="keyboard-icon">
+              <circle cx="13.5" cy="13.5" r="12.5" stroke="#666666" stroke-width="2"/>
+              <circle cx="9.5" cy="11" r="1.5" fill="#666666"/>
+              <circle cx="17.5" cy="11" r="1.5" fill="#666666"/>
+              <path d="M8.5 16C8.5 16 10.5 18.5 13.5 18.5C16.5 18.5 18.5 16 18.5 16" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <svg class="keyboard-icon" viewBox="0 0 19 28" fill="none">
+              <path d="M9.5 0C7.29086 0 5.5 1.79086 5.5 4V14C5.5 16.2091 7.29086 18 9.5 18C11.7091 18 13.5 16.2091 13.5 14V4C13.5 1.79086 11.7091 0 9.5 0Z" fill="#666"/>
+              <path d="M3 12V14C3 17.866 6.13401 21 10 21H9C12.866 21 16 17.866 16 14V12H18V14C18 18.9706 13.9706 23 9 23V28H10V26H8V28H9V23C4.02944 23 0 18.9706 0 14V12H3Z" fill="#666"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    // Get the amount from URL parameter or session storage
+    const urlParams = new URLSearchParams(window.location.search);
+    const amount = urlParams.get('amount') || sessionStorage.getItem('payAmount') || '65';
+    const noteParam = urlParams.get('note') || '';
+    const modeParam = urlParams.get('mode') || '';
+    
+    document.getElementById('displayAmount').textContent = '$' + amount;
+
+    // Search functionality
+    const searchInput = document.querySelector('.search-input');
+    const searchResults = document.getElementById('searchResults');
+    const contentArea = document.querySelector('.content');
+    const noteInput = document.getElementById('noteInput');
+    const continueBtn = document.getElementById('continueBtn');
+    const closeIcon = document.getElementById('closeIcon');
+    const backArrow = document.getElementById('backArrow');
+    const paymentNoteDisplay = document.getElementById('paymentNoteDisplay');
+
+    // Check if we should restore note mode
+    if (modeParam === 'note' && noteParam) {
+      // Hide search elements
+      const searchContainer = document.querySelector('.search-container');
+      const upsellCard = document.querySelector('.upsell-card');
+      searchContainer.style.display = 'none';
+      searchResults.style.display = 'none';
+      if (upsellCard) upsellCard.style.display = 'none';
+      
+      // Show recipient info
+      const recipientInfo = document.getElementById('recipientInfo');
+      const recipientAvatar = document.getElementById('recipientAvatar');
+      const noteSection = document.getElementById('noteSection');
+      recipientInfo.style.display = 'flex';
+      
+      // Set avatar image (default to Carissa's avatar)
+      recipientAvatar.src = './images/2.Monique-32.png';
+      
+      // Set note value
+      noteInput.value = noteParam;
+      
+      // Update payment note display
+      paymentNoteDisplay.textContent = noteParam;
+      
+      // Activate note mode and show keyboard
+      contentArea.classList.add('note-mode');
+      noteSection.style.display = 'flex';
+      
+      // Activate continue button since there's a note
+      continueBtn.classList.add('active');
+      
+      // Show back arrow instead of close icon
+      closeIcon.style.display = 'none';
+      backArrow.style.display = 'block';
+    }
+    
+    // Check if we should restore review mode
+    if (modeParam === 'review' && noteParam) {
+      // Hide search elements
+      const searchContainer = document.querySelector('.search-container');
+      const upsellCard = document.querySelector('.upsell-card');
+      searchContainer.style.display = 'none';
+      searchResults.style.display = 'none';
+      if (upsellCard) upsellCard.style.display = 'none';
+      
+      // Show recipient info
+      const recipientInfo = document.getElementById('recipientInfo');
+      const recipientAvatar = document.getElementById('recipientAvatar');
+      recipientInfo.style.display = 'flex';
+      
+      // Set avatar image (default to Carissa's avatar)
+      recipientAvatar.src = './images/2.Monique-32.png';
+      
+      // Set note value
+      noteInput.value = noteParam;
+      
+      // Activate review mode
+      contentArea.classList.add('review-mode');
+      paymentNoteDisplay.textContent = noteParam;
+      
+      // Show back arrow instead of close icon
+      closeIcon.style.display = 'none';
+      backArrow.style.display = 'block';
+    }
+
+    searchInput.addEventListener('input', function(e) {
+      const searchTerm = e.target.value.trim();
+      
+      if (searchTerm.length > 0) {
+        // Show search results, hide upsell
+        searchResults.classList.add('visible');
+        contentArea.classList.add('searching');
+      } else {
+        // Hide search results, show upsell
+        searchResults.classList.remove('visible');
+        contentArea.classList.remove('searching');
+      }
+    });
+
+    // Contact selection functionality
+    function selectContact(name, cashtag, avatar) {
+      sessionStorage.setItem('selectedContact', JSON.stringify({ name: name, cashtag: cashtag, avatar: avatar }));
+      // Update recipient info
+      document.getElementById('recipientName').textContent = name.split(' ')[0] + ' ' + name.split(' ')[1].charAt(0) + '.';
+      document.getElementById('recipientAvatar').src = './images/' + avatar;
+      
+      // Clear payment note display for fresh start
+      paymentNoteDisplay.textContent = '';
+      
+      // Get elements
+      const searchContainer = document.querySelector('.search-container');
+      const recipientInfo = document.getElementById('recipientInfo');
+      const noteSection = document.getElementById('noteSection');
+      
+      // Animate X icon out and back arrow in
+      closeIcon.classList.add('fade-out');
+      
+      // After X fades out, show back arrow
+      setTimeout(() => {
+        closeIcon.style.display = 'none';
+        backArrow.style.display = 'block';
+        backArrow.classList.add('fade-in');
+      }, 50); // Start back arrow after X opacity fades (50ms)
+      
+      // Animate search bar and results out
+      searchContainer.classList.add('fade-out');
+      searchResults.classList.add('fade-out');
+      
+      // Switch to note mode quickly
+      setTimeout(() => {
+        contentArea.classList.remove('searching');
+        contentArea.classList.add('note-mode');
+        
+        // Add animation classes
+        recipientInfo.classList.add('animate-in');
+        noteSection.classList.add('animate-in');
+        
+        // Focus on note input immediately
+        noteInput.focus();
+      }, 80);
+    }
+
+    // Back/Close navigation
+    function goBack() {
+      // Check if we're in review mode
+      if (contentArea.classList.contains('review-mode')) {
+        // Go back to keypad (details page removed from flow)
+        window.location.href = 'keypad.html';
+        
+      } else if (contentArea.classList.contains('note-mode')) {
+        // Go back to search state
+        const searchContainer = document.querySelector('.search-container');
+        const recipientInfo = document.getElementById('recipientInfo');
+        const noteSection = document.getElementById('noteSection');
+        const upsellCard = document.querySelector('.upsell-card');
+        
+        // Animate back arrow out
+        backArrow.classList.remove('fade-in');
+        backArrow.classList.add('fade-out');
+        
+        // After back arrow starts fading, animate X in
+        setTimeout(() => {
+          backArrow.style.display = 'none';
+          backArrow.classList.remove('fade-out');
+          closeIcon.style.display = 'block';
+          closeIcon.classList.remove('fade-out');
+          closeIcon.classList.add('fade-in');
+        }, 50);
+        
+        // Remove animation classes from previous transition
+        recipientInfo.classList.remove('animate-in');
+        noteSection.classList.remove('animate-in');
+        
+        // Remove note mode
+        contentArea.classList.remove('note-mode');
+        
+        // Show search elements again (remove inline styles so CSS classes take over)
+        searchContainer.style.display = '';
+        searchResults.style.display = '';
+        if (upsellCard) upsellCard.style.display = '';
+        
+        // Reset search container and results
+        searchContainer.classList.remove('fade-out');
+        searchResults.classList.remove('fade-out');
+        
+        // Hide recipient info
+        recipientInfo.style.display = 'none';
+        
+        // Clear note input
+        noteInput.value = '';
+        continueBtn.classList.remove('active');
+        
+        // Clear payment note display
+        paymentNoteDisplay.textContent = '';
+        
+        // Clear search input
+        searchInput.value = '';
+        searchResults.classList.remove('visible');
+        contentArea.classList.remove('searching');
+      } else {
+        // Close the entire sheet and go back to keypad
+        const mainContainer = document.querySelector('.main-container');
+        mainContainer.classList.add('exit');
+        
+        // Navigate quickly - animation runs in parallel
+        setTimeout(() => {
+          window.location.href = `keypad.html?amount=${amount}`;
+        }, 50);
+      }
+    }
+
+    // Note input functionality
+    noteInput.addEventListener('input', function() {
+      if (noteInput.value.trim().length > 0) {
+        continueBtn.classList.add('active');
+        // Update payment note display in real-time
+        paymentNoteDisplay.textContent = noteInput.value;
+      } else {
+        continueBtn.classList.remove('active');
+        // Clear payment note display when input is empty
+        paymentNoteDisplay.textContent = '';
+      }
+    });
+
+    // Continue button click
+    continueBtn.addEventListener('click', function() {
+      if (continueBtn.classList.contains('active')) {
+        submitNote();
+      }
+    });
+
+    // Keyboard functionality
+    let isShiftActive = false;
+
+    function typeKey(char) {
+      const currentValue = noteInput.value;
+      const newChar = isShiftActive ? char.toUpperCase() : char.toLowerCase();
+      noteInput.value = currentValue + newChar;
+      
+      // Trigger input event to update Continue button state
+      noteInput.dispatchEvent(new Event('input'));
+      
+      // Auto-disable shift after typing
+      if (isShiftActive && char !== ' ') {
+        isShiftActive = false;
+      }
+    }
+
+    function deleteKey() {
+      const currentValue = noteInput.value;
+      noteInput.value = currentValue.slice(0, -1);
+      noteInput.dispatchEvent(new Event('input'));
+    }
+
+    function toggleShift() {
+      isShiftActive = !isShiftActive;
+      // Visual feedback could be added here
+    }
+
+    function switchToNumbers() {
+      // For this prototype, we'll keep it simple
+      // In a full implementation, this would switch keyboard layouts
+    }
+
+    function submitNote() {
+      if (noteInput.value.trim().length > 0) {
+        // Store payment note and amount in sessionStorage
+        sessionStorage.setItem('paymentNote', noteInput.value);
+        sessionStorage.setItem('paymentAmount', amount);
+        // selectedContact already saved in sessionStorage when contact was selected
+        // Show half-sheet payment review on keypad (not full-page review)
+        window.location.href = 'keypad.html?showPaymentReview=1';
+      }
+    }
+
+    // Review Continue button
+    const reviewContinueBtn = document.getElementById('reviewContinueBtn');
+    if (reviewContinueBtn) {
+      reviewContinueBtn.addEventListener('click', function() {
+        // Navigate to loader then success screen
+        window.location.href = 'loader.html?next=success';
+      });
+    }
+  </script>
+</body>
+</html>
