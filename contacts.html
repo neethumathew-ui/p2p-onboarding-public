@@ -8,7 +8,7 @@
   <!-- Preload critical resources -->
   <link rel="preload" href="./fonts/CashSans-Medium.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./fonts/CashSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="./images/2_Monique_32.png" as="image">
+  <link rel="preload" href="./images/2.Monique-32.png" as="image">
   
   <!-- Prefetch next pages -->
   <link rel="prefetch" href="review.html">
@@ -1059,7 +1059,7 @@
   <div class="app-container">
     <!-- Status Bar -->
     <div class="status-bar">
-      <img src="./images/Status_bar_iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
+      <img src="./images/Status bar - iPhone.png" alt="Status Bar" style="width: 100%; height: 47px; object-fit: cover;">
     </div>
 
     <!-- Main Container (wraps everything that should slide) -->
@@ -1068,9 +1068,9 @@
       <div class="title-bar">
         <div class="title-bar-left" onclick="goBack()">
           <!-- Close Icon (X) - shown in search state -->
-          <img id="closeIcon" src="./images/Icons/navigation/close.svg" alt="Close" style="width: 24px; height: 24px;">
+          <img id="closeIcon" src="./images/navigation-close.svg" alt="Close" style="width: 24px; height: 24px;">
           <!-- Back Arrow - shown in note state -->
-          <img id="backArrow" src="./images/Icons/navigation/back.svg" alt="Back" style="display: none; width: 24px; height: 24px;">
+          <img id="backArrow" src="./images/navigation-back.svg" alt="Back" style="display: none; width: 24px; height: 24px;">
         </div>
       </div>
 
@@ -1087,7 +1087,7 @@
 
       <!-- Recipient Info (shown in note mode) -->
       <div class="recipient-info" id="recipientInfo">
-        <img src="./images/2_Monique_32.png" alt="Recipient" class="recipient-avatar" id="recipientAvatar" loading="eager" decoding="async">
+        <img src="./images/2.Monique-32.png" alt="Recipient" class="recipient-avatar" id="recipientAvatar" loading="eager" decoding="async">
         <span class="recipient-name" id="recipientName">Carissa T.</span>
         <span class="recipient-for">for</span>
       </div>
@@ -1120,9 +1120,9 @@
       <!-- Upsell Card -->
       <div class="upsell-card">
         <div class="contacts-icon">
-          <video autoplay muted playsinline poster="./images/sync_contacts.png">
-            <source src="./images/Contacts_video.mp4" type="video/mp4">
-            <img src="./images/sync_contacts.png" alt="Sync Contacts">
+          <video autoplay muted playsinline poster="./images/sync contacts.png">
+            <source src="./images/Contacts video.mp4" type="video/mp4">
+            <img src="./images/sync contacts.png" alt="Sync Contacts">
           </video>
         </div>
         <div class="card-content">
@@ -1138,21 +1138,21 @@
           <div class="section-title">Select a recipient</div>
         </div>
         <div class="contact-cell" onclick="selectContact('Carissa Thompson', '$cariss', '2.Monique-32.png')">
-          <img src="./images/2_Monique_32.png" alt="Carissa Thompson" class="contact-avatar" loading="eager" decoding="async">
+          <img src="./images/2.Monique-32.png" alt="Carissa Thompson" class="contact-avatar" loading="eager" decoding="async">
           <div class="contact-info">
             <div class="contact-name">Carissa Thompson</div>
             <div class="contact-cashtag">$cariss</div>
           </div>
         </div>
         <div class="contact-cell" onclick="selectContact('Carter Collins', '$coconut', '2.Monique-32.png')">
-          <img src="./images/2_Monique_32.png" alt="Carter Collins" class="contact-avatar" loading="eager" decoding="async">
+          <img src="./images/2.Monique-32.png" alt="Carter Collins" class="contact-avatar" loading="eager" decoding="async">
           <div class="contact-info">
             <div class="contact-name">Carter Collins</div>
             <div class="contact-cashtag">$coconut</div>
           </div>
         </div>
         <div class="contact-cell" onclick="selectContact('Claire Cooper', '$carrot', '2.Monique-32.png')">
-          <img src="./images/2_Monique_32.png" alt="Claire Cooper" class="contact-avatar" loading="eager" decoding="async">
+          <img src="./images/2.Monique-32.png" alt="Claire Cooper" class="contact-avatar" loading="eager" decoding="async">
           <div class="contact-info">
             <div class="contact-name">Claire Cooper</div>
             <div class="contact-cashtag">$carrot</div>
@@ -1323,7 +1323,7 @@
       recipientInfo.style.display = 'flex';
       
       // Set avatar image (default to Carissa's avatar)
-      recipientAvatar.src = './images/2_Monique_32.png';
+      recipientAvatar.src = './images/2.Monique-32.png';
       
       // Set note value
       noteInput.value = noteParam;
@@ -1358,7 +1358,7 @@
       recipientInfo.style.display = 'flex';
       
       // Set avatar image (default to Carissa's avatar)
-      recipientAvatar.src = './images/2_Monique_32.png';
+      recipientAvatar.src = './images/2.Monique-32.png';
       
       // Set note value
       noteInput.value = noteParam;
